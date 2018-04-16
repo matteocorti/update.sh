@@ -12,6 +12,9 @@ verbose_exec() {
     $1
 }
 
+##############################################################################
+# macports
+
 verbose_exec "sudo port selfupdate"
 verbose_exec "sudo port installed outdated"
 
@@ -19,6 +22,14 @@ if port installed outdated | grep -q -v 'None of the specified ports are install
     verbose_exec "nice sudo port -c upgrade outdated"
     verbose_exec "nice sudo port -u -q uninstall"
 fi
+
+##############################################################################
+# brew
+verbose_exec 'brew update'
+verbose_exec 'brew upgrade'
+
+##############################################################################
+# Perlbrew
 
 verbose_exec "perlbrew self-upgrade"
 
