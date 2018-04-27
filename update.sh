@@ -21,8 +21,13 @@ fi
 
 ##############################################################################
 # brew
-verbose_exec 'brew update'
-verbose_exec 'brew upgrade'
+
+if type brew > /dev/null 2>&1 ; then
+
+    verbose_exec 'brew update'
+    verbose_exec 'brew upgrade'
+
+fi
 
 ##############################################################################
 # Perlbrew
