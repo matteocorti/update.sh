@@ -2,10 +2,6 @@
 
 clear;
 
-PERLBREW_ROOT=${HOME}/perl5/perlbrew
-# shellcheck source=${HOME}/perl5/perlbrew/etc/bashrc
-. "${PERLBREW_ROOT}/etc/bashrc"
-
 verbose_exec() {
     echo "################################################################################"
     echo "### $1"
@@ -31,16 +27,25 @@ verbose_exec 'brew upgrade'
 ##############################################################################
 # Perlbrew
 
-verbose_exec "perlbrew self-upgrade"
+PERLBREW_ROOT=${HOME}/perl5/perlbrew
 
-for version in $( perlbrew list | sed "s/[* ]*\\([^ ]*\\).*/\\1/" ) ; do
+if [ -f "${PERLBREW_ROOT}/etc/bashrc" ] ; then
 
-    verbose_exec "perlbrew use ${version}"
-    verbose_exec "perlbrew upgrade-perl"    
-    LIST=$( cpan-outdated -p --exclude-core )
-    if [ -n "${LIST}" ] ; then
-        verbose_exec "cpanm $LIST"
-    fi
+    # shellcheck source=${HOME}/perl5/perlbrew/etc/bashrc
+    . "${PERLBREW_ROOT}/etc/bashrc"
+
+    verbose_exec "perlbrew self-upgrade"
+
+    for version in $( perlbrew list | sed "s/[* ]*\\([^ ]*\\).*/\\1/" ) ; do
+
+	verbose_exec "perlbrew use ${version}"
+	verbose_exec "perlbrew upgrade-perl"    
+	LIST=$( cpan-outdated -p --exclude-core )
+	if [ -n "${LIST}" ] ; then
+            verbose_exec "cpanm $LIST"
+	fi
     
-done
+    done
+
+fi
 
