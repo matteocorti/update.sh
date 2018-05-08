@@ -9,6 +9,11 @@ verbose_exec() {
 }
 
 ##############################################################################
+# Apple
+
+verbose_exec "sudo softwareupdate -ia"
+
+##############################################################################
 # macports
 
 verbose_exec "sudo port selfupdate"
