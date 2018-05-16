@@ -74,3 +74,5 @@ if [ -f "${PERLBREW_ROOT}/etc/bashrc" ] ; then
 
 fi
 
+echo
+
