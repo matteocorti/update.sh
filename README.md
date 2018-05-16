@@ -15,4 +15,4 @@ Updates a macOS system. Following software packages are analyzed and automatical
 
 ## Bugs
 
-Report bugs to https://github.com/matteocorti/check_ssl_cert/issues
+Report bugs to https://github.com/matteocorti/updates.sh/issues
