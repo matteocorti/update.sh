@@ -22,6 +22,7 @@ sudo softwareupdate -ia
 echo
 echo "##############################################################################"
 echo "# MacPorts"
+echo "#"
 echo
 
 sudo port selfupdate
