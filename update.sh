@@ -2,40 +2,54 @@
 
 clear;
 
-verbose_exec() {
-    echo "################################################################################"
-    echo "### $1"
-    $1
-}
+echo "################################################################################"
+echo "# Microsoft"
+echo "#"
+echo
 
-##############################################################################
-# Apple
+/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list
 
-verbose_exec "sudo softwareupdate -ia"
+/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install
 
-##############################################################################
-# macports
+echo
+echo "##############################################################################"
+echo "# Apple"
+echo "#"
+echo
 
-verbose_exec "sudo port selfupdate"
-verbose_exec "sudo port installed outdated"
+sudo softwareupdate -ia
+
+echo
+echo "##############################################################################"
+echo "# MacPorts"
+echo
+
+sudo port selfupdate
+sudo port installed outdated
 
 if port installed outdated | grep -q -v 'None of the specified ports are installed.' ; then
-    verbose_exec "nice sudo port -c upgrade outdated"
-    verbose_exec "nice sudo port -u -q uninstall"
+    sudo port -c upgrade outdated
+    sudo port -u -q uninstall
 fi
 
-##############################################################################
-# brew
+echo
+echo "##############################################################################"
+echo "# Homebrew"
+echo "#"
+echo
 
-if type brew > /dev/null 2>&1 ; then
+if  command -v brew > /dev/null 2>&1 ; then
 
-    verbose_exec 'brew update'
-    verbose_exec 'brew upgrade'
+    brew update
+    brew upgrade
 
 fi
 
-##############################################################################
-# Perlbrew
+echo
+echo "##############################################################################"
+echo "# Perlbrew"
+echo "#"
+echo
 
 PERLBREW_ROOT=${HOME}/perl5/perlbrew
 
@@ -44,15 +58,15 @@ if [ -f "${PERLBREW_ROOT}/etc/bashrc" ] ; then
     # shellcheck source=${HOME}/perl5/perlbrew/etc/bashrc
     . "${PERLBREW_ROOT}/etc/bashrc"
 
-    verbose_exec "perlbrew self-upgrade"
+    perlbrew self-upgrade
 
     for version in $( perlbrew list | sed "s/[* ]*\\([^ ]*\\).*/\\1/" ) ; do
 
-	verbose_exec "perlbrew use ${version}"
-	verbose_exec "perlbrew upgrade-perl"    
+	perlbrew use "${version}"
+	perlbrew upgrade-perl   
 	LIST=$( cpan-outdated -p --exclude-core )
 	if [ -n "${LIST}" ] ; then
-            verbose_exec "cpanm $LIST"
+            cpanm $LIST
 	fi
     
     done
