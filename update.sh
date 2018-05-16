@@ -33,29 +33,29 @@ if port installed outdated | grep -q -v 'None of the specified ports are install
     sudo port -u -q uninstall
 fi
 
-echo
-echo "##############################################################################"
-echo "# Homebrew"
-echo "#"
-echo
-
 if  command -v brew > /dev/null 2>&1 ; then
 
+    echo
+    echo "##############################################################################"
+    echo "# Homebrew"
+    echo "#"
+    echo
+    
     brew update
     brew upgrade
 
 fi
 
-echo
-echo "##############################################################################"
-echo "# Perlbrew"
-echo "#"
-echo
-
 PERLBREW_ROOT=${HOME}/perl5/perlbrew
 
 if [ -f "${PERLBREW_ROOT}/etc/bashrc" ] ; then
 
+    echo
+    echo "##############################################################################"
+    echo "# Perlbrew"
+    echo "#"
+    echo
+    
     # shellcheck source=${HOME}/perl5/perlbrew/etc/bashrc
     . "${PERLBREW_ROOT}/etc/bashrc"
 
