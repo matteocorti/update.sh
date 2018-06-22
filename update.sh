@@ -21,6 +21,18 @@ sudo softwareupdate -ia
 
 echo
 echo "##############################################################################"
+echo "# Apple Store"
+echo "#"
+echo
+
+if command -v mas > /dev/null 2>&1 ; then
+
+    mas upgrade
+    
+fi
+
+echo
+echo "##############################################################################"
 echo "# MacPorts"
 echo "#"
 echo
