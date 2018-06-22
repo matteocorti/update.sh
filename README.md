@@ -8,6 +8,7 @@
 Updates a macOS system. Following software packages are analyzed and automatically updated
 
  - Apple products
+ - Apple Store apps
  - Microsoft products
  - Perlbrew and installed CPAN modules
  - Homebrew and installed packages
