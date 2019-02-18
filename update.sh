@@ -1,8 +1,7 @@
 #!/bin/sh
 
-clear;
-
 VERBOSE=""
+CLEAR=""
 
 error() {
     printf 'Error: %s\n' "${1}" 1>&2
@@ -17,9 +16,31 @@ run_command() {
     eval "${COMMAND}"
 }
 
+usage() {
+
+    echo "Usage: update.sh [OPTIONS]"
+    echo
+    echo "Options:"
+    echo "   -c,--clear            use client certificate to authenticate"
+    echo "   -h,--help,-?                    this help message"
+    echo "   -v,--verbose                    verbose output"
+    echo
+    echo "Report bugs to https://github.com/matteocorti/update.sh/issues"
+    echo
+    
+}
+
 while true; do
 
     case "$1" in
+	-c|--clear)
+	    CLEAR=1
+	    shift
+	    ;;
+        -h|--help|-\?)
+            usage
+            exit 0
+            ;;
         -v|--verbose)
             VERBOSE=1
             shift
@@ -33,6 +54,10 @@ while true; do
     esac
 
 done
+
+if [ -n "${CLEAR}" ] ; then
+    clear
+fi
 
 echo "################################################################################"
 echo "# Microsoft"
