@@ -2,6 +2,7 @@
 
 VERBOSE=""
 CLEAR=""
+QUIET=""
 
 error() {
     printf 'Error: %s\n' "${1}" 1>&2
@@ -22,8 +23,9 @@ usage() {
     echo
     echo "Options:"
     echo "   -c,--clear            use client certificate to authenticate"
-    echo "   -h,--help,-?                    this help message"
-    echo "   -v,--verbose                    verbose output"
+    echo "   -h,--help,-?          this help message"
+    echo "   -q,--quiet            minimal output"
+    echo "   -v,--verbose          verbose output"
     echo
     echo "Report bugs to https://github.com/matteocorti/update.sh/issues"
     echo
@@ -41,6 +43,10 @@ while true; do
             usage
             exit 0
             ;;
+	-q|--quiet)
+	    QUIET="1"
+	    shift
+	    ;;
         -v|--verbose)
             VERBOSE=1
             shift
@@ -59,27 +65,33 @@ if [ -n "${CLEAR}" ] ; then
     clear
 fi
 
-echo "################################################################################"
-echo "# Microsoft"
-echo "#"
-echo
+if [ -z "${QUIET}" ] ; then
+    echo "################################################################################"
+    echo "# Microsoft"
+    echo "#"
+    echo
+fi
 
 run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
 run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
 
-echo
-echo "##############################################################################"
-echo "# Apple"
-echo "#"
-echo
+if [ -z "${QUIET}" ] ; then
+    echo
+    echo "##############################################################################"
+    echo "# Apple"
+    echo "#"
+    echo
+fi
 
 run_command 'sudo softwareupdate -ia'
 
-echo
-echo "##############################################################################"
-echo "# Apple Store"
-echo "#"
-echo
+if [ -z "${QUIET}" ] ; then
+    echo
+    echo "##############################################################################"
+    echo "# Apple Store"
+    echo "#"
+    echo
+fi
 
 if command -v mas > /dev/null 2>&1 ; then
 
@@ -87,11 +99,13 @@ if command -v mas > /dev/null 2>&1 ; then
     
 fi
 
-echo
-echo "##############################################################################"
-echo "# MacPorts"
-echo "#"
-echo
+if [ -z "${QUIET}" ] ; then
+    echo
+    echo "##############################################################################"
+    echo "# MacPorts"
+    echo "#"
+    echo
+fi
 
 run_command 'sudo port selfupdate'
 run_command 'sudo port installed outdated'
@@ -103,11 +117,13 @@ fi
 
 if  command -v brew > /dev/null 2>&1 ; then
 
-    echo
-    echo "##############################################################################"
-    echo "# Homebrew"
-    echo "#"
-    echo
+    if [ -z "${QUIET}" ] ; then
+	echo
+	echo "##############################################################################"
+	echo "# Homebrew"
+	echo "#"
+	echo
+    fi
     
     run_command 'brew update'
     run_command 'brew upgrade'
@@ -118,11 +134,13 @@ PERLBREW_ROOT=${HOME}/perl5/perlbrew
 
 if [ -f "${PERLBREW_ROOT}/etc/bashrc" ] ; then
 
-    echo
-    echo "##############################################################################"
-    echo "# Perlbrew"
-    echo "#"
-    echo
+    if [ -z "${QUIET}" ] ; then
+	echo
+	echo "##############################################################################"
+	echo "# Perlbrew"
+	echo "#"
+	echo
+    fi
     
     # shellcheck source=${HOME}/perl5/perlbrew/etc/bashrc
     . "${PERLBREW_ROOT}/etc/bashrc"

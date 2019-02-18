@@ -21,8 +21,9 @@ Usage: update.sh [OPTIONS]
 
 Options:
    -c,--clear            use client certificate to authenticate
-   -h,--help,-?                    this help message
-   -v,--verbose                    verbose output
+   -h,--help,-?          this help message
+   -q,--quiet            minimal output
+   -v,--verbose          verbose output
 ```
 
 ## Bugs
