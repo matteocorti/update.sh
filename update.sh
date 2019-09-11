@@ -111,8 +111,8 @@ run_command 'sudo port selfupdate'
 run_command 'sudo port installed outdated'
 
 if port installed outdated | grep -q -v 'None of the specified ports are installed.' ; then
-    run_command 'sudo port -c upgrade outdated'
-    run_command 'sudo port -u -q uninstall'
+    run_command 'sudo port -N -c upgrade outdated'
+    run_command 'sudo port -N -u -q uninstall'
 fi
 
 if  command -v brew > /dev/null 2>&1 ; then
