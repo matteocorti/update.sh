@@ -65,15 +65,19 @@ if [ -n "${CLEAR}" ] ; then
     clear
 fi
 
-if [ -z "${QUIET}" ] ; then
-    echo "################################################################################"
-    echo "# Microsoft"
-    echo "#"
-    echo
-fi
+if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate ] ; then
 
-run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
-run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
+    if [ -z "${QUIET}" ] ; then
+	echo "################################################################################"
+	echo "# Microsoft"
+	echo "#"
+	echo
+    fi
+
+    run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
+    run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
+
+fi
 
 if [ -z "${QUIET}" ] ; then
     echo
@@ -85,36 +89,40 @@ fi
 
 run_command 'sudo softwareupdate -ia'
 
-if [ -z "${QUIET}" ] ; then
-    echo
-    echo "##############################################################################"
-    echo "# Apple Store"
-    echo "#"
-    echo
-fi
-
 if command -v mas > /dev/null 2>&1 ; then
 
+    if [ -z "${QUIET}" ] ; then
+	echo
+	echo "##############################################################################"
+	echo "# Apple Store"
+	echo "#"
+	echo
+    fi
+    
     run_command 'mas upgrade'
     
 fi
 
-if [ -z "${QUIET}" ] ; then
-    echo
-    echo "##############################################################################"
-    echo "# MacPorts"
-    echo "#"
-    echo
+if command -v port > /dev/null 2>&1 ; then
+
+    if [ -z "${QUIET}" ] ; then
+	echo
+	echo "##############################################################################"
+	echo "# MacPorts"
+	echo "#"
+	echo
+    fi
+
+    run_command 'sudo port selfupdate'
+    run_command 'sudo port installed outdated'
+
+    if port installed outdated | grep -q -v 'None of the specified ports are installed.' ; then
+	run_command 'sudo port -N -c upgrade outdated'
+	run_command 'sudo port -N -u -q uninstall'
+    fi
+
 fi
-
-run_command 'sudo port selfupdate'
-run_command 'sudo port installed outdated'
-
-if port installed outdated | grep -q -v 'None of the specified ports are installed.' ; then
-    run_command 'sudo port -N -c upgrade outdated'
-    run_command 'sudo port -N -u -q uninstall'
-fi
-
+    
 if  command -v brew > /dev/null 2>&1 ; then
 
     if [ -z "${QUIET}" ] ; then
