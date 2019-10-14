@@ -132,7 +132,8 @@ if  command -v brew > /dev/null 2>&1 ; then
 	echo "#"
 	echo
     fi
-    
+
+    HOMEBREW_NO_COLOR=1
     run_command 'brew update'
     run_command 'brew upgrade'
 
