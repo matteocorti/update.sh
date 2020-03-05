@@ -137,6 +137,9 @@ if  command -v brew > /dev/null 2>&1 ; then
     run_command 'brew update'
     run_command 'brew upgrade'
 
+    # Cask
+    run_comman "brew cask upgrade"
+
 fi
 
 PERLBREW_ROOT=${HOME}/perl5/perlbrew
