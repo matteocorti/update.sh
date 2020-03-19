@@ -10,11 +10,19 @@ error() {
 }
 
 run_command() {
+
     COMMAND="$1"
+
     if [ -n "${VERBOSE}" ] ; then
 	printf 'excuting: "%s"\n' "${COMMAND}"
     fi
+
+    HOMEBREW_NO_EMOJI=1; export HOMEBREW_NO_EMOJI
+    HOMEBREW_NO_ANALYTICS=1; export HOMEBREW_NO_ANALYTICS
+    HOMEBREW_NO_COLOR=1; export HOMEBREW_NO_COLOR
+
     eval "${COMMAND}"
+
 }
 
 usage() {
@@ -133,12 +141,13 @@ if  command -v brew > /dev/null 2>&1 ; then
 	echo
     fi
 
-    HOMEBREW_NO_COLOR=1
     run_command 'brew update'
     run_command 'brew upgrade'
 
     # Cask
-    run_command "brew cask upgrade"
+    run_command 'brew cask upgrade'
+
+    run_command 'brew cleanup'
 
 fi
 
@@ -154,7 +163,7 @@ if [ -f "${PERLBREW_ROOT}/etc/bashrc" ] ; then
 	echo
     fi
     
-    # shellcheck source=${HOME}/perl5/perlbrew/etc/bashrc
+    # shellcheck disable=SC1090
     . "${PERLBREW_ROOT}/etc/bashrc"
 
     run_command 'perlbrew self-upgrade'
