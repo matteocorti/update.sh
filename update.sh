@@ -145,7 +145,7 @@ if  command -v brew > /dev/null 2>&1 ; then
     run_command 'brew upgrade'
 
     # Cask
-    run_command 'brew cask upgrade'
+    run_command 'brew upgrade --cask'
 
     run_command 'brew cleanup'
 
