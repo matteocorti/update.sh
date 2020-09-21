@@ -30,7 +30,7 @@ usage() {
     echo "Usage: update.sh [OPTIONS]"
     echo
     echo "Options:"
-    echo "   -c,--clear            use client certificate to authenticate"
+    echo "   -c,--clear            clear the terminal screen before updating"
     echo "   -h,--help,-?          this help message"
     echo "   -q,--quiet            minimal output"
     echo "   -v,--verbose          verbose output"
