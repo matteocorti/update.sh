@@ -20,7 +20,7 @@ Updates a macOS system. Following software packages are analyzed and automatical
 Usage: update.sh [OPTIONS]
 
 Options:
-   -c,--clear            use client certificate to authenticate
+   -c,--clear            clear the terminal screen before updating
    -h,--help,-?          this help message
    -q,--quiet            minimal output
    -v,--verbose          verbose output
