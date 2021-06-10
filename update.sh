@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Copyright (c) 2018-2021 Matteo Corti <matteo@corti.li>
+
+VERSION=1.0.0
+
 VERBOSE=""
 CLEAR=""
 QUIET=""
@@ -37,7 +41,7 @@ usage() {
     echo
     echo "Report bugs to https://github.com/matteocorti/update.sh/issues"
     echo
-    
+
 }
 
 while true; do
@@ -58,6 +62,10 @@ while true; do
         -v|--verbose)
             VERBOSE=1
             shift
+            ;;
+        -V|--version)
+            echo "update.sh version ${VERSION}"
+            exit 0
             ;;
 	*)
 	    if [ -n "${1}" ] ; then
@@ -119,9 +127,9 @@ if command -v mas > /dev/null 2>&1 ; then
 	echo "#"
 	echo
     fi
-    
+
     run_command 'mas upgrade'
-    
+
 fi
 
 if command -v port > /dev/null 2>&1 ; then
@@ -143,7 +151,7 @@ if command -v port > /dev/null 2>&1 ; then
     fi
 
 fi
-    
+
 if  command -v brew > /dev/null 2>&1 ; then
 
     if [ -z "${QUIET}" ] ; then
@@ -175,8 +183,8 @@ if [ -f "${PERLBREW_ROOT}/etc/bashrc" ] ; then
 	echo "#"
 	echo
     fi
-    
-    # shellcheck disable=SC1090
+
+    # shellcheck disable=SC1091
     . "${PERLBREW_ROOT}/etc/bashrc"
 
     run_command 'perlbrew self-upgrade'
@@ -189,7 +197,7 @@ if [ -f "${PERLBREW_ROOT}/etc/bashrc" ] ; then
 	if [ -n "${LIST}" ] ; then
             run_command "cpanm ${LIST}"
 	fi
-    
+
     done
 
 fi
