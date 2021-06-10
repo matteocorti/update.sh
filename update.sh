@@ -87,6 +87,19 @@ if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app
 
 fi
 
+if [ -x /usr/local/bin/RemoteUpdateManager ] ; then
+
+    if [ -z "${QUIET}" ] ; then
+	echo "################################################################################"
+	echo "# Adobe"
+	echo "#"
+	echo
+    fi
+
+    run_command 'sudo /usr/local/bin/RemoteUpdateManager  --action=install'
+
+fi
+
 if [ -z "${QUIET}" ] ; then
     echo
     echo "##############################################################################"
