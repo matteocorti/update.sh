@@ -25,6 +25,11 @@ run_command() {
     HOMEBREW_NO_ANALYTICS=1; export HOMEBREW_NO_ANALYTICS
     HOMEBREW_NO_COLOR=1; export HOMEBREW_NO_COLOR
 
+    if [ -n "${QUIET}" ] ; then
+        # suppress standard output
+        COMMAND="${COMMAND} > /dev/null"
+    fi
+
     eval "${COMMAND}"
 
 }
@@ -116,7 +121,14 @@ if [ -z "${QUIET}" ] ; then
     echo
 fi
 
-run_command 'sudo softwareupdate -ia'
+# softwareupdates writes information messages to stderr
+#  we try to filter the informational messages away
+if [ -n "${QUIET}" ] ; then
+    COMMAND="( sudo softwareupdate -ia > /dev/null)  2>&1 | grep -v '^No\ updates\ available$'"
+else
+    COMMAND='sudo softwareupdate -ia'
+fi
+run_command "${COMMAND}"
 
 if command -v mas > /dev/null 2>&1 ; then
 
@@ -146,8 +158,10 @@ if command -v port > /dev/null 2>&1 ; then
     run_command 'sudo port installed outdated'
 
     if port installed outdated | grep -q -v 'None of the specified ports are installed.' ; then
+
 	run_command 'sudo port -N -c upgrade outdated'
 	run_command 'sudo port -N -u -q uninstall'
+
     fi
 
 fi
@@ -202,5 +216,7 @@ if [ -f "${PERLBREW_ROOT}/etc/bashrc" ] ; then
 
 fi
 
-echo
+if [ -z "${QUIET}" ] ; then
+    echo
+fi
 
