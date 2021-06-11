@@ -1,1 +1,1 @@
-Initial release
+Added support for Adobe products
