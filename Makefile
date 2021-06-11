@@ -1,7 +1,8 @@
 VERSION=`cat VERSION`
 DIST_DIR=update.sh-$(VERSION)
 DIST_FILES=update.sh VERSION README.md NEWS Makefile COPYRIGHT COPYING
-FORMATTED_FILES=update.sh VERSION README.md NEWS COPYRIGHT COPYING
+FORMATTED_FILES=update.sh VERSION README.md NEWS COPYRIGHT COPYING RELEASE_NOTES.md publish_release.sh
+SHELLCHECK_FILES=update.sh publish_release.sh
 YEAR=`date +"%Y"`
 
 dist: version_check formatting_check copyright_check shellcheck
@@ -37,5 +38,5 @@ shellcheck:
 ifndef SHELLCHECK
 	echo "No shellcheck installed: skipping test"
 else
-	if shellcheck --help 2>&1 | grep -q -- '-o\ ' ; then shellcheck -o all update.sh ; else shellcheck update.sh ; fi
+	if shellcheck --help 2>&1 | grep -q -- '-o\ ' ; then shellcheck -o all $(SHELLCHECK_FILES) ; else shellcheck $(SHELLCHECK_FILES) ; fi
 endif
