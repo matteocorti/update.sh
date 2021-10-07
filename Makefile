@@ -21,6 +21,18 @@ formatting_check:
 	! grep -q '\\t' $(FORMATTED_FILES)
 	! grep -q '[[:blank:]]$$' $(DIST_FILES)
 
+SHFMT= := $(shell command -v shfmt 2> /dev/null)
+format:
+ifndef SHFMT
+	echo "No shfmt installed"
+else
+# -p POSIX
+# -w write to file
+# -s simplify
+# -i 4 indent with 4 spaces
+	shfmt -p -w -s -i 4 $(SHELLCHECK_FILES)
+endif
+
 version_check:
 	grep -q "VERSION\ *=\ *[\'\"]*$(VERSION)" update.sh
 	grep -q "${VERSION}" NEWS
