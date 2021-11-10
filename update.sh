@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2021 Matteo Corti <matteo@corti.li>
 
-VERSION=1.1.0
+VERSION=1.1.1
 
 VERBOSE=""
 CLEAR=""
