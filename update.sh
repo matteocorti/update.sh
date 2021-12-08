@@ -18,7 +18,7 @@ run_command() {
     COMMAND="$1"
 
     if [ -n "${VERBOSE}" ]; then
-        printf 'excuting: "%s"\n' "${COMMAND}"
+        printf 'executing: "%s"\n' "${COMMAND}"
     fi
 
     HOMEBREW_NO_EMOJI=1
