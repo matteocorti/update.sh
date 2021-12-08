@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2021 Matteo Corti <matteo@corti.li>
 
-VERSION=1.1.0
+VERSION=1.1.1
 
 VERBOSE=""
 CLEAR=""
@@ -103,6 +103,10 @@ if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app
         run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
     fi
     run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
+
+    if [ -z "${QUIET}" ]; then
+        echo
+    fi
 
 fi
 
