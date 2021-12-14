@@ -23,6 +23,7 @@ Usage: update.sh [OPTIONS]
 Options:
    -c,--clear            clear the terminal screen before updating
    -h,--help,-?          this help message
+   -n,--name             show machine name
    -q,--quiet            minimal output
    -v,--verbose          verbose output
 ```

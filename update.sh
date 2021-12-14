@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2021 Matteo Corti <matteo@corti.li>
 
-VERSION=1.1.1
+VERSION=1.2.0
 
 VERBOSE=""
 CLEAR=""
@@ -44,6 +44,7 @@ usage() {
     echo "Options:"
     echo "   -c,--clear            clear the terminal screen before updating"
     echo "   -h,--help,-?          this help message"
+    echo "   -n,--name             show machine name"
     echo "   -q,--quiet            minimal output"
     echo "   -v,--verbose          verbose output"
     echo
@@ -62,6 +63,11 @@ while true; do
     -h | --help | -\?)
         usage
         exit 0
+        ;;
+    -n | --name)
+        NAME=$( hostname )
+        NAME=" (${NAME})"
+        shift
         ;;
     -q | --quiet)
         QUIET="1"
@@ -93,7 +99,7 @@ if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app
 
     if [ -z "${QUIET}" ]; then
         echo "################################################################################"
-        echo "# Microsoft"
+        echo "# Microsoft${NAME}"
         echo "#"
         echo
     fi
@@ -114,7 +120,7 @@ if [ -x /usr/local/bin/RemoteUpdateManager ]; then
 
     if [ -z "${QUIET}" ]; then
         echo "################################################################################"
-        echo "# Adobe"
+        echo "# Adobe${NAME}"
         echo "#"
         echo
     fi
@@ -126,7 +132,7 @@ fi
 if [ -z "${QUIET}" ]; then
     echo
     echo "##############################################################################"
-    echo "# Apple"
+    echo "# Apple${NAME}"
     echo "#"
     echo
 fi
@@ -145,7 +151,7 @@ if command -v mas >/dev/null 2>&1; then
     if [ -z "${QUIET}" ]; then
         echo
         echo "##############################################################################"
-        echo "# Apple Store"
+        echo "# Apple Store${NAME}"
         echo "#"
         echo
     fi
@@ -159,7 +165,7 @@ if command -v port >/dev/null 2>&1; then
     if [ -z "${QUIET}" ]; then
         echo
         echo "##############################################################################"
-        echo "# MacPorts"
+        echo "# MacPorts${NAME}"
         echo "#"
         echo
     fi
@@ -181,7 +187,7 @@ if command -v brew >/dev/null 2>&1; then
     if [ -z "${QUIET}" ]; then
         echo
         echo "##############################################################################"
-        echo "# Homebrew"
+        echo "# Homebrew${NAME}"
         echo "#"
         echo
     fi
@@ -203,7 +209,7 @@ if [ -f "${PERLBREW_ROOT}/etc/bashrc" ]; then
     if [ -z "${QUIET}" ]; then
         echo
         echo "##############################################################################"
-        echo "# Perlbrew"
+        echo "# Perlbrew${NAME}"
         echo "#"
         echo
     fi

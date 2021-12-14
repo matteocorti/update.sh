@@ -1,1 +1,1 @@
-Only list available MS updates in verbose mode
+Added the --name option to show the machine name
