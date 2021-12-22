@@ -1,0 +1,4 @@
+2021-12-14  Matteo Corti  <matteo@corti.li>
+
+	* update.sh (usage): Added the --name option
+
