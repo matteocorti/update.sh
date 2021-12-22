@@ -198,6 +198,7 @@ if command -v brew >/dev/null 2>&1; then
     # Cask
     run_command 'brew upgrade --cask'
 
+    run_command 'brew autcleanup'
     run_command 'brew cleanup'
 
 fi
