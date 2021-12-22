@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2021 Matteo Corti <matteo@corti.li>
 
-VERSION=1.2.0
+VERSION=1.3.0
 
 VERBOSE=""
 CLEAR=""
@@ -65,7 +65,7 @@ while true; do
         exit 0
         ;;
     -n | --name)
-        NAME=$( hostname )
+        NAME=$(hostname)
         NAME=" (${NAME})"
         shift
         ;;

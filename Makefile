@@ -1,7 +1,7 @@
 VERSION=`cat VERSION`
 DIST_DIR=update.sh-$(VERSION)
-DIST_FILES=update.sh VERSION README.md NEWS Makefile COPYRIGHT COPYING
-FORMATTED_FILES=update.sh VERSION README.md NEWS COPYRIGHT COPYING RELEASE_NOTES.md publish_release.sh
+DIST_FILES=update.sh VERSION README.md NEWS.md Makefile COPYRIGHT.md COPYING.md
+FORMATTED_FILES=update.sh VERSION README.md NEWS.md COPYRIGHT.md COPYING.md RELEASE_NOTES.md publish_release.sh
 SHELLCHECK_FILES=update.sh publish_release.sh
 YEAR=`date +"%Y"`
 
@@ -35,12 +35,12 @@ endif
 
 version_check:
 	grep -q "VERSION\ *=\ *[\'\"]*$(VERSION)" update.sh
-	grep -q "${VERSION}" NEWS
+	grep -q "${VERSION}" NEWS.md
         echo "Version check: OK"
 
 copyright_check:
 	grep -q "&copy; Matteo Corti, 2018-$(YEAR)" README.md
-	grep -q "Copyright (c) 2018-$(YEAR) Matteo Corti" COPYRIGHT
+	grep -q "Copyright &copy; 2018-$(YEAR) Matteo Corti" COPYRIGHT.md
 	grep -q "Copyright (c) 2018-$(YEAR) Matteo Corti <matteo@corti.li>" update.sh
 	echo "Copyright year check: OK"
 

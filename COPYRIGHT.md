@@ -1,7 +1,7 @@
 
-  Copyright (c) 2018-2021 Matteo Corti
+* Copyright &copy; 2018-2021 Matteo Corti
 
-with the following individuals added to the list of Contributing Authors
+with the following individuals added to the list of contributing authors
 
 
 This program is free software; you can redistribute it and/or modify

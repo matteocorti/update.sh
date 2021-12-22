@@ -1,1 +1,1 @@
-Added the --name option to show the machine name
+Added ```brew autocleanup```
