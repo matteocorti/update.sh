@@ -30,4 +30,4 @@ Options:
 
 ## Bugs
 
-Report bugs to [https://github.com/matteocorti/updates.sh/issues](https://github.com/matteocorti/updates.sh/issues)
+Report bugs to [https://github.com/matteocorti/update.sh/issues](https://github.com/matteocorti/update.sh/issues)
