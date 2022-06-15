@@ -1,4 +1,8 @@
+2022-06-15  Matteo Corti  <matteo@corti.li>
+
+        * update.sh: MacUpdater support
+
 2021-12-14  Matteo Corti  <matteo@corti.li>
 
-	* update.sh (usage): Added the --name option
+        * update.sh (usage): Added the --name option
 

@@ -1,5 +1,5 @@
 
- &copy; Matteo Corti, 2018-2021
+ &copy; Matteo Corti, 2018-2022
 
 # Command line automatic updates on macOS
 
@@ -11,7 +11,8 @@ Updates a macOS system. Following software packages are analyzed and automatical
  - Apple Store apps (requires mas)
  - Microsoft products
  - Adobe products
- - Perlbrew and installed CPAN modules
+ - Products supported by [MacUpdater](https://www.corecode.io/macupdater/) (requires MacUpdater with a professional license)
+C - Perlbrew and installed CPAN modules
  - Homebrew and installed packages
  - MacPorts and installed ports
 

@@ -1,1 +1,1 @@
-Added ```brew autocleanup```
+MacUpdater support

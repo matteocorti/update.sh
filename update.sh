@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Copyright (c) 2018-2021 Matteo Corti <matteo@corti.li>
+# Copyright (c) 2018-2022 Matteo Corti <matteo@corti.li>
 
-VERSION=1.3.0
+VERSION=1.4.0
 
 VERBOSE=""
 CLEAR=""
@@ -157,6 +157,20 @@ if command -v mas >/dev/null 2>&1; then
     fi
 
     run_command 'mas upgrade'
+
+fi
+
+if [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
+
+    if [ -z "${QUIET}" ]; then
+        echo
+        echo "##############################################################################"
+        echo "# MacUpdater${NAME}"
+        echo "#"
+        echo
+    fi
+
+    run_command '/Applications/MacUpdater.app/Contents/Resources/macupdater_client update --quiet'
 
 fi
 
