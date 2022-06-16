@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2022 Matteo Corti <matteo@corti.li>
 
-VERSION=1.4.0
+VERSION=1.4.1
 
 VERBOSE=""
 CLEAR=""
@@ -170,6 +170,7 @@ if [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; the
         echo
     fi
 
+    run_command '/Applications/MacUpdater.app/Contents/Resources/macupdater_client scan --quiet'
     run_command '/Applications/MacUpdater.app/Contents/Resources/macupdater_client update --quiet'
 
 fi

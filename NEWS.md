@@ -1,3 +1,5 @@
+ * 2022-06-16 Version 1.4.1
+   * Force a scan before updating with MacUpdater
  * 2022-06-15 Version 1.4.0
    * [MacUpdater](https://www.corecode.io/macupdater/) support
  * 2021-12-22 Version 1.3.0

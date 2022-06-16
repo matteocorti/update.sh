@@ -1,1 +1,1 @@
-MacUpdater support
+Force a scan before updating with MacUpdater
