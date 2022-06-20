@@ -8,6 +8,10 @@ VERBOSE=""
 CLEAR=""
 QUIET=""
 
+if [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
+    MACUPDATER='YES'
+fi
+
 error() {
     printf 'Error: %s\n' "${1}" 1>&2
     exit 1
@@ -97,6 +101,7 @@ fi
 
 if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate ]; then
 
+    
     if [ -z "${QUIET}" ]; then
         echo "################################################################################"
         echo "# Microsoft${NAME}"
@@ -104,14 +109,23 @@ if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app
         echo
     fi
 
-    if [ -n "${VERBOSE}" ]; then
-        # we don't need the list
-        run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
-    fi
-    run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
-
-    if [ -z "${QUIET}" ]; then
+    if [ -n "${MACUPDATER}" ] ; then
+        
+        echo "skipping: will be handled by MacUpdater"
         echo
+
+    else
+    
+        if [ -n "${VERBOSE}" ]; then
+            # we don't need the list
+            run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
+        fi
+        run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
+        
+        if [ -z "${QUIET}" ]; then
+            echo
+        fi
+
     fi
 
 fi
@@ -125,7 +139,16 @@ if [ -x /usr/local/bin/RemoteUpdateManager ]; then
         echo
     fi
 
-    run_command 'sudo /usr/local/bin/RemoteUpdateManager  --action=install'
+    if [ -n "${MACUPDATER}" ] ; then
+        
+        echo "skipping: will be handled by MacUpdater"
+        echo
+
+    else
+        
+        run_command 'sudo /usr/local/bin/RemoteUpdateManager  --action=install'
+
+    fi
 
 fi
 
