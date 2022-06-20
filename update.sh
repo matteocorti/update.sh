@@ -111,7 +111,7 @@ if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app
 
     if [ -n "${MACUPDATER}" ] ; then
         
-        echo "skipping: will be handled by MacUpdater"
+        echo "Skipping: will be handled by MacUpdater"
         echo
 
     else
@@ -141,7 +141,7 @@ if [ -x /usr/local/bin/RemoteUpdateManager ]; then
 
     if [ -n "${MACUPDATER}" ] ; then
         
-        echo "skipping: will be handled by MacUpdater"
+        echo "Skipping: will be handled by MacUpdater"
         echo
 
     else
