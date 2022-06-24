@@ -99,6 +99,21 @@ if [ -n "${CLEAR}" ]; then
     clear
 fi
 
+if [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
+
+    if [ -z "${QUIET}" ]; then
+        echo
+        echo "##############################################################################"
+        echo "# MacUpdater${NAME}"
+        echo "#"
+        echo
+    fi
+
+    run_command '/Applications/MacUpdater.app/Contents/Resources/macupdater_client scan --quiet'
+    run_command '/Applications/MacUpdater.app/Contents/Resources/macupdater_client update --quiet'
+
+fi
+
 if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate ]; then
 
     
@@ -180,21 +195,6 @@ if command -v mas >/dev/null 2>&1; then
     fi
 
     run_command 'mas upgrade'
-
-fi
-
-if [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
-
-    if [ -z "${QUIET}" ]; then
-        echo
-        echo "##############################################################################"
-        echo "# MacUpdater${NAME}"
-        echo "#"
-        echo
-    fi
-
-    run_command '/Applications/MacUpdater.app/Contents/Resources/macupdater_client scan --quiet'
-    run_command '/Applications/MacUpdater.app/Contents/Resources/macupdater_client update --quiet'
 
 fi
 
