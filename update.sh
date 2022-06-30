@@ -123,24 +123,15 @@ if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app
         echo "#"
         echo
     fi
-
-    if [ -n "${MACUPDATER}" ] ; then
-        
-        echo "Skipping: will be handled by MacUpdater"
-        echo
-
-    else
     
-        if [ -n "${VERBOSE}" ]; then
-            # we don't need the list
-            run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
-        fi
-        run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
+    if [ -n "${VERBOSE}" ]; then
+        # we don't need the list
+        run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
+    fi
+    run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
         
-        if [ -z "${QUIET}" ]; then
-            echo
-        fi
-
+    if [ -z "${QUIET}" ]; then
+        echo
     fi
 
 fi
