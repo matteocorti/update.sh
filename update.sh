@@ -118,6 +118,7 @@ if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app
 
     
     if [ -z "${QUIET}" ]; then
+        echo
         echo "################################################################################"
         echo "# Microsoft${NAME}"
         echo "#"
@@ -139,6 +140,7 @@ fi
 if [ -x /usr/local/bin/RemoteUpdateManager ]; then
 
     if [ -z "${QUIET}" ]; then
+        echo
         echo "################################################################################"
         echo "# Adobe${NAME}"
         echo "#"
