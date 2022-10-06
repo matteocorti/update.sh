@@ -1,4 +1,6 @@
- * 2022-06-16 Version 1.4.1
+* 2022-10-06 Version 1.4.2
+   * Automatically accept the license by Apple updates
+* 2022-06-16 Version 1.4.1
    * Force a scan before updating with MacUpdater
  * 2022-06-15 Version 1.4.0
    * [MacUpdater](https://www.corecode.io/macupdater/) support

@@ -1,3 +1,7 @@
+2022-10-06  Matteo Corti  <matteo@corti.li>
+
+        * update.sh: Added --agree-to-license to softwareupdate
+
 2022-07-01  Matteo Corti  <matteo@corti.li>
 
         * update.sh: Some more spacing and MS before MacUpdater

@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2022 Matteo Corti <matteo@corti.li>
 
-VERSION=1.4.1
+VERSION=1.4.2
 
 VERBOSE=""
 CLEAR=""
@@ -170,9 +170,9 @@ fi
 # softwareupdates writes information messages to stderr
 #  we try to filter the informational messages away
 if [ -n "${QUIET}" ]; then
-    COMMAND="( sudo softwareupdate -ia > /dev/null)  2>&1 | grep -v '^No\ updates\ available$'"
+    COMMAND="( sudo softwareupdate --install --all --agree-to-license > /dev/null)  2>&1 | grep -v '^No\ updates\ available$'"
 else
-    COMMAND='sudo softwareupdate -ia'
+    COMMAND='sudo softwareupdate --install --all --agree-to-license'
 fi
 run_command "${COMMAND}"
 

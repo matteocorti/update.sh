@@ -1,1 +1,1 @@
-Force a scan before updating with MacUpdater
+Automatically accept the license by Apple updates
