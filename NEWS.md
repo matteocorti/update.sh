@@ -1,3 +1,5 @@
+* 2023-01-20 Version 1.5.0
+   * Added support for Ruby
 * 2022-10-06 Version 1.4.2
    * Automatically accept the license by Apple updates
 * 2022-06-16 Version 1.4.1

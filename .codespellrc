@@ -1,0 +1,5 @@
+[codespell]
+check-filenames =
+check-hidden =
+skip = ./test/cabundle.crt,.git,check_ssl_cert-*
+ignore-words = .codespell-ignore

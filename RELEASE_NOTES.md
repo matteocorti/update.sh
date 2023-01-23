@@ -1,1 +1,1 @@
-Automatically accept the license by Apple updates
+Added support for Ruby

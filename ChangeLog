@@ -1,3 +1,11 @@
+2023-01-23  Matteo Corti  <matteo@corti.li>
+
+        * update.sh: Remove colored output for Ruby
+
+2023-01-20  Matteo Corti  <matteo@corti.li>
+
+        * update.sh (usage): Added 'bundle update' for Ruby
+
 2022-10-06  Matteo Corti  <matteo@corti.li>
 
         * update.sh: Added --agree-to-license to softwareupdate

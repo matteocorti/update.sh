@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Copyright (c) 2018-2022 Matteo Corti <matteo@corti.li>
+# Copyright (c) 2018-2023 Matteo Corti <matteo@corti.li>
 
-VERSION=1.4.2
+VERSION=1.5.0
 
 VERBOSE=""
 CLEAR=""
@@ -230,6 +230,20 @@ if command -v brew >/dev/null 2>&1; then
 
     run_command 'brew autoremove'
     run_command 'brew cleanup'
+
+fi
+
+if command -v bundle >/dev/null 2>&1; then
+
+    if [ -z "${QUIET}" ]; then
+        echo
+        echo "##############################################################################"
+        echo "# Ruby${NAME}"
+        echo "#"
+        echo
+    fi
+
+    run_command 'sudo bundle update --no-color'
 
 fi
 

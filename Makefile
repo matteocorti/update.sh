@@ -16,7 +16,18 @@ dist: version_check formatting_check copyright_check shellcheck
 	tar cfz $(DIST_DIR).tar.gz  $(DIST_DIR)
 	tar cfj $(DIST_DIR).tar.bz2 $(DIST_DIR)
 
-remove_blanks:
+CODESPELL := $(shell command -v codespell 2> /dev/null )
+# spell check
+codespell:
+ifndef CODESPELL
+	echo "no codespell installed"
+else
+	codespell \
+	.
+endif
+
+
+Remove_blanks:
 	sed -i '' 's/[[:blank:]]*$$//' $(DIST_FILES)
 
 formatting_check:
@@ -58,4 +69,4 @@ endif
 distclean:
 	rm -rf update.sh-[0-9]*
 
-.PHONY: distclean version_check copyright_check remove_blanks dist
+.PHONY: distclean version_check copyright_check remove_blanks dist codespell
