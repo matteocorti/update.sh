@@ -268,9 +268,15 @@ if [ -f "${PERLBREW_ROOT}/etc/bashrc" ]; then
 
         run_command "perlbrew use ${version}"
         run_command 'perlbrew upgrade-perl'
-        LIST=$(cpan-outdated -p --exclude-core | tr '\n' ' ')
-        if [ -n "${LIST}" ]; then
-            run_command "cpanm ${LIST}"
+
+        COMMAND=$( command -v cpan-outdated)
+        if [ -n "${COMMAND}" ] ; then
+        
+            LIST=$(cpan-outdated -p --exclude-core | tr '\n' ' ')
+            if [ -n "${LIST}" ]; then
+                run_command "cpanm ${LIST}"
+            fi
+
         fi
 
     done
