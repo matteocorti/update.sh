@@ -1,6 +1,8 @@
 
  &copy; Matteo Corti, 2018-2023
 
+![](https://img.shields.io/github/v/release/matteocorti/update.sh)&nbsp;![](https://img.shields.io/github/downloads/matteocorti/update.sh/latest/total)&nbsp;![](https://img.shields.io/github/downloads/matteocorti/update.sh/total)&nbsp;![](https://img.shields.io/github/license/matteocorti/update.sh)&nbsp;![](https://img.shields.io/github/stars/matteocorti/update.sh)&nbsp;![](https://img.shields.io/github/forks/matteocorti/update.sh)
+
 # Command line automatic updates on macOS
 
 ## Description
