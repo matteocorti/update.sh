@@ -197,7 +197,7 @@ if command -v mas >/dev/null 2>&1; then
         echo
     fi
 
-    if [ -z "${QUIET}" ] ; then
+    if [ -n "${QUIET}" ] ; then
         run_command 'mas upgrade 2>&1 | grep -v Nothing\ found\ to\ upgrade'
     else
         run_command 'mas upgrade'
