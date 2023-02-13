@@ -1,3 +1,5 @@
+* 2023-02-13 Version 1.6.0
+   * More verbose output with -v
 * 2023-01-20 Version 1.5.0
    * Added support for Ruby
 * 2022-10-06 Version 1.4.2

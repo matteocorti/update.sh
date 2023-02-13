@@ -1,1 +1,1 @@
-Added support for Ruby
+More verbose output with -v

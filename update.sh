@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2023 Matteo Corti <matteo@corti.li>
 
-VERSION=1.5.0
+VERSION=1.6.0
 
 VERBOSE=""
 CLEAR=""
@@ -79,6 +79,8 @@ while true; do
         ;;
     -v | --verbose)
         VERBOSE=1
+        echo "Enabling verbose output"
+        echo
         shift
         ;;
     -V | --version)
@@ -109,8 +111,12 @@ if [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; the
         echo
     fi
 
-    run_command '/Applications/MacUpdater.app/Contents/Resources/macupdater_client scan --quiet'
-    run_command '/Applications/MacUpdater.app/Contents/Resources/macupdater_client update --quiet'
+    if [ -z "${VERBOSE}" ]; then
+        QUIET_OPT="--quiet"
+    fi
+
+    run_command "/Applications/MacUpdater.app/Contents/Resources/macupdater_client scan ${QUIET_OPT}"
+    run_command "/Applications/MacUpdater.app/Contents/Resources/macupdater_client update ${QUIET_OPT}"
 
 fi
 
@@ -148,8 +154,10 @@ if [ -x /usr/local/bin/RemoteUpdateManager ]; then
 
     if [ -n "${MACUPDATER}" ]; then
 
-        echo "Skipping: will be handled by MacUpdater"
-        echo
+        if [ -z "${QUIET}" ] ; then
+            echo "Skipping: will be handled by MacUpdater"
+            echo
+        fi
 
     else
 
@@ -172,7 +180,10 @@ fi
 if [ -n "${QUIET}" ]; then
     COMMAND="( sudo softwareupdate --install --all --agree-to-license > /dev/null)  2>&1 | grep -v '^No\ updates\ available$'"
 else
-    COMMAND='sudo softwareupdate --install --all --agree-to-license'
+    if [ -n "${VERBOSE}" ]; then
+        VERBOSE_OPT="--verbose"
+    fi
+    COMMAND="sudo softwareupdate --install --all --agree-to-license ${VERBOSE_OPT}"
 fi
 run_command "${COMMAND}"
 
@@ -186,7 +197,11 @@ if command -v mas >/dev/null 2>&1; then
         echo
     fi
 
-    run_command 'mas upgrade'
+    if [ -z "${QUIET}" ] ; then
+        run_command 'mas upgrade 2>&1 | grep -v Nothing\ found\ to\ upgrade'
+    else
+        run_command 'mas upgrade'
+    fi
 
 fi
 
@@ -200,13 +215,17 @@ if command -v port >/dev/null 2>&1; then
         echo
     fi
 
-    run_command 'sudo port selfupdate'
-    run_command 'sudo port installed outdated'
+    if [ -n "${VERBOSE}" ]; then
+        VERBOSE_OPT='-v'
+    fi
+
+    run_command "sudo port ${VERBOSE_OPT} selfupdate"
+    run_command "sudo port ${VERBOSE_OPT} installed outdated"
 
     if port installed outdated | grep -q -v 'None of the specified ports are installed.'; then
 
-        run_command 'sudo port -N -c upgrade outdated'
-        run_command 'sudo port -N -u -q uninstall'
+        run_command "sudo port ${VERBOSE_OPT} -N -c upgrade outdated"
+        run_command "sudo port ${VERBOSE_OPT} -N -u -q uninstall"
 
     fi
 
@@ -222,14 +241,18 @@ if command -v brew >/dev/null 2>&1; then
         echo
     fi
 
-    run_command 'brew update'
-    run_command 'brew upgrade'
+    if [ -n "${VERBOSE}" ]; then
+        VERBOSE_OPT='-v'
+    fi
+
+    run_command "brew ${VERBOSE_OPT} update"
+    run_command "brew ${VERBOSE_OPT} upgrade"
 
     # Cask
-    run_command 'brew upgrade --cask'
+    run_command "brew ${VERBOSE_OPT} upgrade --cask"
 
-    run_command 'brew autoremove'
-    run_command 'brew cleanup'
+    run_command "brew ${VERBOSE_OPT} autoremove"
+    run_command "brew ${VERBOSE_OPT} cleanup"
 
 fi
 
@@ -243,7 +266,11 @@ if command -v bundle >/dev/null 2>&1; then
         echo
     fi
 
-    run_command 'sudo bundle update --no-color'
+    if [ -n "${VERBOSE}" ]; then
+        VERBOSE_OPT='--verbose'
+    fi
+
+    run_command "sudo bundle update --no-color ${VERBOSE_OPT}"
 
 fi
 
@@ -262,19 +289,30 @@ if [ -f "${PERLBREW_ROOT}/etc/bashrc" ]; then
     # shellcheck disable=SC1091
     . "${PERLBREW_ROOT}/etc/bashrc"
 
-    run_command 'perlbrew self-upgrade'
+    if [ -n "${VERBOSE}" ]; then
+        VERBOSE_OPT='-v'
+    fi
+
+    run_command "perlbrew ${VERBOSE_OPT} self-upgrade"
 
     for version in $(perlbrew list | sed 's/[* ]*\([^ ]*\).*/\1/'); do
 
-        run_command "perlbrew use ${version}"
-        run_command 'perlbrew upgrade-perl'
+        run_command "perlbrew ${VERBOSE_OPT} use ${version}"
+        run_command "perlbrew ${VERBOSE_OPT} upgrade-perl"
 
-        COMMAND=$( command -v cpan-outdated)
-        if [ -n "${COMMAND}" ] ; then
-        
+        COMMAND=$(command -v cpan-outdated)
+        if [ -n "${COMMAND}" ]; then
+
             LIST=$(cpan-outdated -p --exclude-core | tr '\n' ' ')
+
             if [ -n "${LIST}" ]; then
-                run_command "cpanm ${LIST}"
+
+                if [ -n "${VERBOSE}" ]; then
+                    VERBOSE_OPT='-v'
+                fi
+
+                run_command "cpanm ${VERBOSE_OPT} ${LIST}"
+
             fi
 
         fi
