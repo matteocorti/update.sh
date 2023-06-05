@@ -248,8 +248,8 @@ if [ -n "${MAS}" ]; then
             echo
         fi
 
-        # remove color
-        #
+        # remove color from output
+        # https://stackoverflow.com/a/18000433/387981
 
         if [ -n "${QUIET}" ]; then
             run_command 'mas upgrade 2>&1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g" |  grep -v Nothing\ found\ to\ upgrade'
