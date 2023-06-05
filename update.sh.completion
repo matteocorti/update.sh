@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+_update.sh() {
+
+    local cur prev opts
+
+    COMPREPLY=()
+
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    #
+    # list of command line options
+    #   only the autocompletion with long options is implemented: long options are more readable and quick to enter since we are
+    #   using autocompletion.
+    #
+    opts="--adobe --apple --brew --macupdater --mas --msupdate --perl --clear --help --name --quiet --verbose"
+
+    if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]]; then
+        # shellcheck disable=2207
+        COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+        return 0
+    fi
+
+}
+
+complete -F _update.sh update.sh
