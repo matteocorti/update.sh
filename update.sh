@@ -2,15 +2,11 @@
 
 # Copyright (c) 2018-2023 Matteo Corti <matteo@corti.li>
 
-VERSION=1.6.0
+VERSION=2.0.0
 
 VERBOSE=""
 CLEAR=""
 QUIET=""
-
-if [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
-    MACUPDATER='YES'
-fi
 
 error() {
     printf 'Error: %s\n' "${1}" 1>&2
@@ -46,9 +42,16 @@ usage() {
     echo "Usage: update.sh [OPTIONS]"
     echo
     echo "Options:"
+    echo "      --adobe            update Adobe products"
+    echo "      --apple            update Apple products"
+    echo "      --brew             update Homebrew packages"
     echo "   -c,--clear            clear the terminal screen before updating"
     echo "   -h,--help,-?          this help message"
+    echo "      --macupdater       update with MacUpdater"
+    echo "      --mas              update Apple Store applications"
+    echo "      --msupdate         update Microsoft products"
     echo "   -n,--name             show machine name"
+    echo "      --perl             update Perl and CPAN modules with Perlbrew"
     echo "   -q,--quiet            minimal output"
     echo "   -v,--verbose          verbose output"
     echo
@@ -57,9 +60,26 @@ usage() {
 
 }
 
+ALL=1
+
 while true; do
 
     case "$1" in
+    --adobe)
+        ADOBE=1
+        ALL=
+        shift
+        ;;
+    --apple)
+        APPLE=1
+        ALL=
+        shift
+        ;;
+    --brew)
+        BREW=1
+        ALL=
+        shift
+        ;;
     -c | --clear)
         CLEAR=1
         shift
@@ -68,9 +88,34 @@ while true; do
         usage
         exit 0
         ;;
+    --mas)
+        MAS=1
+        ALL=
+        shift
+        ;;
+    --macupdater)
+        MAC_UPDATER=1
+        ALL=
+        shift
+        ;;
+    --msupdate)
+        MSUPDATE=1
+        ALL=
+        shift
+        ;;
     -n | --name)
         NAME=$(hostname)
         NAME=" (${NAME})"
+        shift
+        ;;
+    --perl)
+        PERL=1
+        ALL=
+        shift
+        ;;
+    --port)
+        PORT=1
+        ALL=
         shift
         ;;
     -q | --quiet)
@@ -97,11 +142,22 @@ while true; do
 
 done
 
+if [ -n "${ALL}" ]; then
+    ADOBE=1
+    APPLE=1
+    BREW=1
+    MAS=1
+    MAC_UPDATER=1
+    MSUPDATE=1
+    PORT=1
+    PERL=1
+fi
+
 if [ -n "${CLEAR}" ]; then
     clear
 fi
 
-if [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
+if [ -n "${MAC_UPDATER}" ] && [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
 
     if [ -z "${QUIET}" ]; then
         echo
@@ -120,7 +176,7 @@ if [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; the
 
 fi
 
-if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate ]; then
+if [ -n "${MSUPDATE}" ] && [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate ]; then
 
     if [ -z "${QUIET}" ]; then
         echo
@@ -142,7 +198,7 @@ if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app
 
 fi
 
-if [ -x /usr/local/bin/RemoteUpdateManager ]; then
+if [ -n "${ADOBE}" ] && [ -x /usr/local/bin/RemoteUpdateManager ]; then
 
     if [ -z "${QUIET}" ]; then
         echo
@@ -152,172 +208,184 @@ if [ -x /usr/local/bin/RemoteUpdateManager ]; then
         echo
     fi
 
-    if [ -n "${MACUPDATER}" ]; then
+    run_command 'sudo /usr/local/bin/RemoteUpdateManager  --action=install'
 
-        if [ -z "${QUIET}" ] ; then
-            echo "Skipping: will be handled by MacUpdater"
+fi
+
+if [ -n "${APPLE}" ]; then
+
+    if [ -z "${QUIET}" ]; then
+        echo
+        echo "##############################################################################"
+        echo "# Apple${NAME}"
+        echo "#"
+        echo
+    fi
+
+    # softwareupdates writes information messages to stderr
+    #  we try to filter the informational messages away
+    if [ -n "${QUIET}" ]; then
+        COMMAND="( sudo softwareupdate --install --all --agree-to-license > /dev/null)  2>&1 | grep -v '^No\ updates\ available$'"
+    else
+        if [ -n "${VERBOSE}" ]; then
+            VERBOSE_OPT="--verbose"
+        fi
+        COMMAND="sudo softwareupdate --install --all --agree-to-license ${VERBOSE_OPT}"
+    fi
+    run_command "${COMMAND}"
+
+fi
+
+if [ -n "${MAS}" ]; then
+
+    if command -v mas >/dev/null 2>&1; then
+
+        if [ -z "${QUIET}" ]; then
+            echo
+            echo "##############################################################################"
+            echo "# Apple Store${NAME}"
+            echo "#"
             echo
         fi
 
-    else
+        # remove color
+        #
 
-        run_command 'sudo /usr/local/bin/RemoteUpdateManager  --action=install'
-
-    fi
-
-fi
-
-if [ -z "${QUIET}" ]; then
-    echo
-    echo "##############################################################################"
-    echo "# Apple${NAME}"
-    echo "#"
-    echo
-fi
-
-# softwareupdates writes information messages to stderr
-#  we try to filter the informational messages away
-if [ -n "${QUIET}" ]; then
-    COMMAND="( sudo softwareupdate --install --all --agree-to-license > /dev/null)  2>&1 | grep -v '^No\ updates\ available$'"
-else
-    if [ -n "${VERBOSE}" ]; then
-        VERBOSE_OPT="--verbose"
-    fi
-    COMMAND="sudo softwareupdate --install --all --agree-to-license ${VERBOSE_OPT}"
-fi
-run_command "${COMMAND}"
-
-if command -v mas >/dev/null 2>&1; then
-
-    if [ -z "${QUIET}" ]; then
-        echo
-        echo "##############################################################################"
-        echo "# Apple Store${NAME}"
-        echo "#"
-        echo
-    fi
-
-    if [ -n "${QUIET}" ] ; then
-        run_command 'mas upgrade 2>&1 | grep -v Nothing\ found\ to\ upgrade'
-    else
-        run_command 'mas upgrade'
-    fi
-
-fi
-
-if command -v port >/dev/null 2>&1; then
-
-    if [ -z "${QUIET}" ]; then
-        echo
-        echo "##############################################################################"
-        echo "# MacPorts${NAME}"
-        echo "#"
-        echo
-    fi
-
-    if [ -n "${VERBOSE}" ]; then
-        VERBOSE_OPT='-v'
-    fi
-
-    run_command "sudo port ${VERBOSE_OPT} selfupdate"
-    run_command "sudo port ${VERBOSE_OPT} installed outdated"
-
-    if port installed outdated | grep -q -v 'None of the specified ports are installed.'; then
-
-        run_command "sudo port ${VERBOSE_OPT} -N -c upgrade outdated"
-        run_command "sudo port ${VERBOSE_OPT} -N -u -q uninstall"
+        if [ -n "${QUIET}" ]; then
+            run_command 'mas upgrade 2>&1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g" |  grep -v Nothing\ found\ to\ upgrade'
+        else
+            run_command 'mas upgrade 2>&1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g"'
+        fi
 
     fi
 
 fi
 
-if command -v brew >/dev/null 2>&1; then
+if [ -n "${PORT}" ]; then
 
-    if [ -z "${QUIET}" ]; then
-        echo
-        echo "##############################################################################"
-        echo "# Homebrew${NAME}"
-        echo "#"
-        echo
-    fi
+    if command -v port >/dev/null 2>&1; then
 
-    if [ -n "${VERBOSE}" ]; then
-        VERBOSE_OPT='-v'
-    fi
+        if [ -z "${QUIET}" ]; then
+            echo
+            echo "##############################################################################"
+            echo "# MacPorts${NAME}"
+            echo "#"
+            echo
+        fi
 
-    run_command "brew ${VERBOSE_OPT} update"
-    run_command "brew ${VERBOSE_OPT} upgrade"
+        if [ -n "${VERBOSE}" ]; then
+            VERBOSE_OPT='-v'
+        fi
 
-    # Cask
-    run_command "brew ${VERBOSE_OPT} upgrade --cask"
+        run_command "sudo port ${VERBOSE_OPT} selfupdate"
+        run_command "sudo port ${VERBOSE_OPT} installed outdated"
 
-    run_command "brew ${VERBOSE_OPT} autoremove"
-    run_command "brew ${VERBOSE_OPT} cleanup"
+        if port installed outdated | grep -q -v 'None of the specified ports are installed.'; then
 
-fi
-
-if command -v bundle >/dev/null 2>&1; then
-
-    if [ -z "${QUIET}" ]; then
-        echo
-        echo "##############################################################################"
-        echo "# Ruby${NAME}"
-        echo "#"
-        echo
-    fi
-
-    if [ -n "${VERBOSE}" ]; then
-        VERBOSE_OPT='--verbose'
-    fi
-
-    run_command "sudo bundle update --no-color ${VERBOSE_OPT}"
-
-fi
-
-PERLBREW_ROOT=${HOME}/perl5/perlbrew
-
-if [ -f "${PERLBREW_ROOT}/etc/bashrc" ]; then
-
-    if [ -z "${QUIET}" ]; then
-        echo
-        echo "##############################################################################"
-        echo "# Perlbrew${NAME}"
-        echo "#"
-        echo
-    fi
-
-    # shellcheck disable=SC1091
-    . "${PERLBREW_ROOT}/etc/bashrc"
-
-    if [ -n "${VERBOSE}" ]; then
-        VERBOSE_OPT='-v'
-    fi
-
-    run_command "perlbrew ${VERBOSE_OPT} self-upgrade"
-
-    for version in $(perlbrew list | sed 's/[* ]*\([^ ]*\).*/\1/'); do
-
-        run_command "perlbrew ${VERBOSE_OPT} use ${version}"
-        run_command "perlbrew ${VERBOSE_OPT} upgrade-perl"
-
-        COMMAND=$(command -v cpan-outdated)
-        if [ -n "${COMMAND}" ]; then
-
-            LIST=$(cpan-outdated -p --exclude-core | tr '\n' ' ')
-
-            if [ -n "${LIST}" ]; then
-
-                if [ -n "${VERBOSE}" ]; then
-                    VERBOSE_OPT='-v'
-                fi
-
-                run_command "cpanm ${VERBOSE_OPT} ${LIST}"
-
-            fi
+            run_command "sudo port ${VERBOSE_OPT} -N -c upgrade outdated"
+            run_command "sudo port ${VERBOSE_OPT} -N -u -q uninstall"
 
         fi
 
-    done
+    fi
+
+fi
+
+if [ -n "${BREW}" ]; then
+
+    if command -v brew >/dev/null 2>&1; then
+
+        if [ -z "${QUIET}" ]; then
+            echo
+            echo "##############################################################################"
+            echo "# Homebrew${NAME}"
+            echo "#"
+            echo
+        fi
+
+        if [ -n "${VERBOSE}" ]; then
+            VERBOSE_OPT='-v'
+        fi
+
+        run_command "brew ${VERBOSE_OPT} update"
+        run_command "brew ${VERBOSE_OPT} upgrade"
+
+        # Cask
+        run_command "brew ${VERBOSE_OPT} upgrade --cask"
+
+        run_command "brew ${VERBOSE_OPT} autoremove"
+        run_command "brew ${VERBOSE_OPT} cleanup"
+
+    fi
+
+    if command -v bundle >/dev/null 2>&1; then
+
+        if [ -z "${QUIET}" ]; then
+            echo
+            echo "##############################################################################"
+            echo "# Ruby${NAME}"
+            echo "#"
+            echo
+        fi
+
+        if [ -n "${VERBOSE}" ]; then
+            VERBOSE_OPT='--verbose'
+        fi
+
+        run_command "sudo bundle update --no-color ${VERBOSE_OPT}"
+
+    fi
+
+fi
+
+if [ -n "${PERL}" ]; then
+
+    PERLBREW_ROOT=${HOME}/perl5/perlbrew
+
+    if [ -f "${PERLBREW_ROOT}/etc/bashrc" ]; then
+
+        if [ -z "${QUIET}" ]; then
+            echo
+            echo "##############################################################################"
+            echo "# Perlbrew${NAME}"
+            echo "#"
+            echo
+        fi
+
+        # shellcheck disable=SC1091
+        . "${PERLBREW_ROOT}/etc/bashrc"
+
+        if [ -n "${VERBOSE}" ]; then
+            VERBOSE_OPT='-v'
+        fi
+
+        run_command "perlbrew ${VERBOSE_OPT} self-upgrade"
+
+        for version in $(perlbrew list | sed 's/[* ]*\([^ ]*\).*/\1/'); do
+
+            run_command "perlbrew ${VERBOSE_OPT} use ${version}"
+            run_command "perlbrew ${VERBOSE_OPT} upgrade-perl"
+
+            COMMAND=$(command -v cpan-outdated)
+            if [ -n "${COMMAND}" ]; then
+
+                LIST=$(cpan-outdated -p --exclude-core | tr '\n' ' ')
+
+                if [ -n "${LIST}" ]; then
+
+                    if [ -n "${VERBOSE}" ]; then
+                        VERBOSE_OPT='-v'
+                    fi
+
+                    run_command "cpanm ${VERBOSE_OPT} ${LIST}"
+
+                fi
+
+            fi
+
+        done
+
+    fi
 
 fi
 

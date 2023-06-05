@@ -66,7 +66,10 @@ else
 	if shellcheck --help 2>&1 | grep -q -- '-o\ ' ; then shellcheck -o all $(SHELLCHECK_FILES) ; else shellcheck $(SHELLCHECK_FILES) ; fi
 endif
 
-distclean:
+clean:
+	rm -rf *~ *.bak
+
+distclean: clean
 	rm -rf update.sh-[0-9]*
 
-.PHONY: distclean version_check copyright_check remove_blanks dist codespell
+.PHONY: distclean version_check copyright_check remove_blanks dist codespell clean

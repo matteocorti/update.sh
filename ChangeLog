@@ -1,3 +1,7 @@
+2023-06-05  Matteo Corti  <matteo@corti.li>
+
+        * update.sh: options to run an update type only
+
 2023-02-13  Matteo Corti  <matteo@corti.li>
 
         * update.sh: More verbose output with -v
