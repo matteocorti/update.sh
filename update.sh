@@ -282,8 +282,8 @@ if [ -n "${PORT}" ]; then
 
         if port installed outdated | grep -q -v 'None of the specified ports are installed.'; then
 
-            run_command "sudo port ${VERBOSE_OPT} -N -c upgrade outdated"
-            run_command "sudo port ${VERBOSE_OPT} -N -u -q uninstall"
+            run_command "sudo port ${VERBOSE_OPT} -N -c -p upgrade outdated"
+            run_command "sudo port ${VERBOSE_OPT} -N -u -q -p uninstall"
 
         fi
 
