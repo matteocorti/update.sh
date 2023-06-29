@@ -53,6 +53,7 @@ usage() {
     echo "   -n,--name             show machine name"
     echo "      --perl             update Perl and CPAN modules with Perlbrew"
     echo "   -q,--quiet            minimal output"
+    echo "      --ruby             ruby"
     echo "   -v,--verbose          verbose output"
     echo
     echo "Report bugs to https://github.com/matteocorti/update.sh/issues"
@@ -122,6 +123,11 @@ while true; do
         QUIET="1"
         shift
         ;;
+    --ruby)
+        RUBY=1
+        ALL=
+        shift
+        ;;
     -v | --verbose)
         VERBOSE=1
         echo "Enabling verbose output"
@@ -146,11 +152,12 @@ if [ -n "${ALL}" ]; then
     ADOBE=1
     APPLE=1
     BREW=1
-    MAS=1
     MAC_UPDATER=1
+    MAS=1
     MSUPDATE=1
-    PORT=1
     PERL=1
+    PORT=1
+    RUBY=1
 fi
 
 if [ -n "${CLEAR}" ]; then
@@ -318,12 +325,16 @@ if [ -n "${BREW}" ]; then
 
     fi
 
+fi
+
+if [ -n "${RUBY}" ] ; then
+    
     if command -v bundle >/dev/null 2>&1; then
 
         if [ -z "${QUIET}" ]; then
             echo
             echo "##############################################################################"
-            echo "# Ruby${NAME}"
+            echo "# Ruby ${NAME}"
             echo "#"
             echo
         fi
@@ -332,8 +343,10 @@ if [ -n "${BREW}" ]; then
             VERBOSE_OPT='--verbose'
         fi
 
-        run_command "sudo bundle update --no-color ${VERBOSE_OPT}"
-
+        run_command "bundle update --no-color ${VERBOSE_OPT}"
+        run_command "gem update --system ${VERBOSE_OPT}"
+        run_command "gem update ${VERBOSE_OPT}"
+        
     fi
 
 fi
