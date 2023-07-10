@@ -328,7 +328,7 @@ if [ -n "${BREW}" ]; then
 fi
 
 if [ -n "${RUBY}" ] ; then
-    
+
     if command -v bundle >/dev/null 2>&1; then
 
         if [ -z "${QUIET}" ]; then
@@ -346,7 +346,7 @@ if [ -n "${RUBY}" ] ; then
         run_command "bundle update --no-color ${VERBOSE_OPT}"
         run_command "gem update --system ${VERBOSE_OPT}"
         run_command "gem update ${VERBOSE_OPT}"
-        
+
     fi
 
 fi
