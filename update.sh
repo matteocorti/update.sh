@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2023 Matteo Corti <matteo@corti.li>
 
-VERSION=2.0.0
+VERSION=2.1.0
 
 VERBOSE=""
 CLEAR=""
@@ -46,6 +46,7 @@ usage() {
     echo "      --apple            update Apple products"
     echo "      --brew             update Homebrew packages"
     echo "   -c,--clear            clear the terminal screen before updating"
+    echo "      --emacs            update emacs packages"
     echo "   -h,--help,-?          this help message"
     echo "      --macupdater       update with MacUpdater"
     echo "      --mas              update Apple Store applications"
@@ -83,6 +84,11 @@ while true; do
         ;;
     -c | --clear)
         CLEAR=1
+        shift
+        ;;
+    --emacs)
+        EMACS=1
+        ALL=
         shift
         ;;
     -h | --help | -\?)
@@ -152,6 +158,7 @@ if [ -n "${ALL}" ]; then
     ADOBE=1
     APPLE=1
     BREW=1
+    EMACS=1
     MAC_UPDATER=1
     MAS=1
     MSUPDATE=1
@@ -326,6 +333,25 @@ if [ -n "${BREW}" ]; then
     fi
 
 fi
+
+if [ -n "${EMACS}" ] ; then
+
+    if [ -x /Applications/Emacs.app/Contents/MacOS/emacs-nw ] ; then
+
+        if [ -z "${QUIET}" ]; then
+            echo
+            echo "##############################################################################"
+            echo "# Emacs ${NAME}"
+            echo "#"
+            echo
+        fi
+
+        run_command "/Applications/Emacs.app/Contents/MacOS/emacs-nw -l ~/.emacs --batch -f auto-package-update-now"
+
+    fi
+
+fi
+
 
 if [ -n "${RUBY}" ] ; then
 

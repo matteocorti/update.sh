@@ -1,4 +1,6 @@
+* 2023-08-01, Version 2.1.0
    * bash completion script
+   * ```--emacs``` to update emacs packages
 * 2023-06-05 Version 2.0.0
    * Command line options to run an update type only
 * 2023-02-13 Version 1.6.0
