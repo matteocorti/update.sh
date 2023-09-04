@@ -1,2 +1,2 @@
-```--emacs``` to update emacs packages
+Added ```--no-*``` options to skip updates
 

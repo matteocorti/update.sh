@@ -1,3 +1,5 @@
+* 2023-09-04, Version 2.2.0
+   * Added ```--no-*``` options to skip updates
 * 2023-08-01, Version 2.1.0
    * bash completion script
    * ```--emacs``` to update emacs packages

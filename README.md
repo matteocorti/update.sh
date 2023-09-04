@@ -25,11 +25,31 @@ Updates a macOS system. Following software packages are analyzed and automatical
 Usage: update.sh [OPTIONS]
 
 Options:
+      --adobe            update Adobe products
+      --apple            update Apple products
+      --brew             update Homebrew packages
    -c,--clear            clear the terminal screen before updating
+      --emacs            update emacs packages
    -h,--help,-?          this help message
+      --macupdater       update with MacUpdater
+      --mas              update Apple Store applications
+      --msupdate         update Microsoft products
    -n,--name             show machine name
+      --no-adobe         do not update Adobe products
+      --no-apple         do not update Apple products
+      --no-brew          do not update Homebrew packages
+      --no-emacs         do not update emacs packages
+      --no-macupdater    do not update with MacUpdater
+      --no-mas           do not update Apple Store applications
+      --no-msupdate      do not update Microsoft products
+      --no-perl          do not update Perl and CPAN modules with Perlbrew
+      --no-ruby          do not update ruby
+      --perl             update Perl and CPAN modules with Perlbrew
    -q,--quiet            minimal output
+      --ruby             update ruby
    -v,--verbose          verbose output
+
+Report bugs to https://github.com/matteocorti/update.sh/issues
 ```
 
 ## Bugs

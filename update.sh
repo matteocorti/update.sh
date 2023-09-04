@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2023 Matteo Corti <matteo@corti.li>
 
-VERSION=2.1.0
+VERSION=2.2.0
 
 VERBOSE=""
 CLEAR=""
@@ -52,9 +52,18 @@ usage() {
     echo "      --mas              update Apple Store applications"
     echo "      --msupdate         update Microsoft products"
     echo "   -n,--name             show machine name"
+    echo "      --no-adobe         do not update Adobe products"
+    echo "      --no-apple         do not update Apple products"
+    echo "      --no-brew          do not update Homebrew packages"
+    echo "      --no-emacs         do not update emacs packages"
+    echo "      --no-macupdater    do not update with MacUpdater"
+    echo "      --no-mas           do not update Apple Store applications"
+    echo "      --no-msupdate      do not update Microsoft products"
+    echo "      --no-perl          do not update Perl and CPAN modules with Perlbrew"
+    echo "      --no-ruby          do not update ruby"
     echo "      --perl             update Perl and CPAN modules with Perlbrew"
     echo "   -q,--quiet            minimal output"
-    echo "      --ruby             ruby"
+    echo "      --ruby             update ruby"
     echo "   -v,--verbose          verbose output"
     echo
     echo "Report bugs to https://github.com/matteocorti/update.sh/issues"
@@ -115,6 +124,42 @@ while true; do
         NAME=" (${NAME})"
         shift
         ;;
+    --no-adobe)
+        NO_ADOBE=1
+        shift
+        ;;
+    --no-apple)
+        NO_APPLE=1
+        shift
+        ;;
+    --no-brew)
+        NO_BREW=1
+        shift
+        ;;
+    --no-emacs)
+        NO_EMACS=1
+        shift
+        ;;
+    --no-macupdater)
+        NO_MAC_UPDATER=1
+        shift
+        ;;
+    --no-mas)
+        NO_MAS=1
+        shift
+        ;;
+    --no-msupdate)
+        NO_MSUPDATE=1
+        shift
+        ;;
+    --no-perl)
+        NO_PERL=1
+        shift
+        ;;
+    --no-ruby)
+        NO_RUBY=1
+        shift
+        ;;
     --perl)
         PERL=1
         ALL=
@@ -165,6 +210,34 @@ if [ -n "${ALL}" ]; then
     PERL=1
     PORT=1
     RUBY=1
+fi
+
+if [ -n "${NO_ADOBE}" ]; then
+    ADOBE=
+fi
+if [ -n "${NO_APPLE}" ]; then
+    APPLE=
+fi
+if [ -n "${NO_BREW}" ]; then
+    NO_BREW=
+fi
+if [ -n "${NO_EMACS}" ]; then
+    NO_EMACS=
+fi
+if [ -n "${NO_MAC_UPDATER}" ]; then
+    MAC_UPDATER=
+fi
+if [ -n "${NO_MAS}" ]; then
+    MAS=
+fi
+if [ -n "${NO_MSUPDATE}" ]; then
+    MSUPDATE=
+fi
+if [ -n "${NO_PERL}" ]; then
+    PERL=
+fi
+if [ -n "${NO_RUBY}" ]; then
+    RUBY=
 fi
 
 if [ -n "${CLEAR}" ]; then
