@@ -1,3 +1,5 @@
+* 2023-10-01, Version 2.3.0
+   * Options can be specified in the ```~/.update.sh.rc``` file (no documentation yet)
 * 2023-09-04, Version 2.2.0
    * Added ```--no-*``` options to skip updates
 * 2023-08-01, Version 2.1.0

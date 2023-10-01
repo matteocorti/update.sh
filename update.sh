@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2023 Matteo Corti <matteo@corti.li>
 
-VERSION=2.2.0
+VERSION=2.3.0
 
 VERBOSE=""
 CLEAR=""
@@ -72,6 +72,12 @@ usage() {
 }
 
 ALL=1
+
+# source the settings file
+if [ -r "${HOME}/.update.sh.rc" ] ; then
+    # shellcheck disable=SC1091
+    . "${HOME}/.update.sh.rc"
+fi
 
 while true; do
 

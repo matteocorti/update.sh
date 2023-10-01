@@ -1,1 +1,1 @@
-Added ```--no-*``` options to skip updates
+Options can be specified in the ```~/.update.sh.rc``` file (no documentation yet)
