@@ -1,8 +1,10 @@
 #!/bin/sh
 
-# Copyright (c) 2018-2023 Matteo Corti <matteo@corti.li>
+# Copyright (c) 2018-2024 Matteo Corti <matteo@corti.li>
 
-VERSION=2.3.0
+VERSION=2.4.0
+
+SIGNALS="HUP INT QUIT TERM ABRT"
 
 VERBOSE=""
 CLEAR=""
@@ -11,6 +13,55 @@ QUIET=""
 error() {
     printf 'Error: %s\n' "${1}" 1>&2
     exit 1
+}
+
+create_temporary_file() {
+
+    # create a temporary file
+    #   mktemp is not always available (e.g., on AIX)
+    #   we could use https://stackoverflow.com/questions/10224921/how-to-create-a-temporary-file-with-portable-shell-in-a-secure-way
+    #   but on some systems od -N4 -tu /dev/random takes seconds (?) to execute
+
+    if [ -n "${MKTEMP}" ]; then
+        TEMPFILE="$(mktemp "${TMPDIR}/XXXXXX" 2>/dev/null)"
+    else
+        TEMPFILE=${TMPDIR}/XXX-$(od -N4 -tu /dev/random | head -n 1 | sed 's/ *$//' | sed 's/.* //')
+        touch "${TEMPFILE}"
+    fi
+
+    if [ -z "${TEMPFILE}" ] || [ ! -w "${TEMPFILE}" ]; then
+        echo 'temporary file creation failure.' 1>&2
+    fi
+
+    # add the file to the list of temporary files
+    TEMPORARY_FILES="${TEMPORARY_FILES} ${TEMPFILE}"
+
+}
+
+remove_temporary_files() {
+    # shellcheck disable=SC2086
+    if [ -n "${TEMPORARY_FILES}" ]; then
+        rm -f ${TEMPORARY_FILES}
+    fi
+}
+
+cleanup() {
+    remove_temporary_files
+    # shellcheck disable=SC2086
+    trap - ${SIGNALS}
+    exit
+}
+
+################################################################################
+# trap passing the signal name
+# see https://stackoverflow.com/questions/2175647/is-it-possible-to-detect-which-trap-signal-in-bash/2175751#2175751
+trap_with_arg() {
+    func="$1"
+    shift
+    for sig; do
+        # shellcheck disable=SC2064
+        trap "${func} ${sig}" "${sig}"
+    done
 }
 
 run_command() {
@@ -61,9 +112,11 @@ usage() {
     echo "      --no-msupdate      do not update Microsoft products"
     echo "      --no-perl          do not update Perl and CPAN modules with Perlbrew"
     echo "      --no-ruby          do not update ruby"
+    echo "      --no-steam         do not update steam"
     echo "      --perl             update Perl and CPAN modules with Perlbrew"
     echo "   -q,--quiet            minimal output"
     echo "      --ruby             update ruby"
+    echo "      --steam            update Steam"
     echo "   -v,--verbose          verbose output"
     echo
     echo "Report bugs to https://github.com/matteocorti/update.sh/issues"
@@ -74,10 +127,15 @@ usage() {
 ALL=1
 
 # source the settings file
-if [ -r "${HOME}/.update.sh.rc" ] ; then
+if [ -r "${HOME}/.update.sh.rc" ]; then
     # shellcheck disable=SC1091
     . "${HOME}/.update.sh.rc"
 fi
+
+# Cleanup before program termination
+# Using named signals to be POSIX compliant
+# shellcheck disable=SC2086
+trap_with_arg cleanup ${SIGNALS}
 
 while true; do
 
@@ -166,6 +224,10 @@ while true; do
         NO_RUBY=1
         shift
         ;;
+    --no-steam)
+        NO_STEAM=1
+        shift
+        ;;
     --perl)
         PERL=1
         ALL=
@@ -182,6 +244,11 @@ while true; do
         ;;
     --ruby)
         RUBY=1
+        ALL=
+        shift
+        ;;
+    --steam)
+        STEAM=1
         ALL=
         shift
         ;;
@@ -216,6 +283,7 @@ if [ -n "${ALL}" ]; then
     PERL=1
     PORT=1
     RUBY=1
+    STEAM=1
 fi
 
 if [ -n "${NO_ADOBE}" ]; then
@@ -245,6 +313,9 @@ fi
 if [ -n "${NO_RUBY}" ]; then
     RUBY=
 fi
+if [ -n "${NO_STEAM}" ]; then
+    STEAM=
+fi
 
 if [ -n "${CLEAR}" ]; then
     clear
@@ -266,6 +337,62 @@ if [ -n "${MAC_UPDATER}" ] && [ -x /Applications/MacUpdater.app/Contents/Resourc
 
     run_command "/Applications/MacUpdater.app/Contents/Resources/macupdater_client scan ${QUIET_OPT}"
     run_command "/Applications/MacUpdater.app/Contents/Resources/macupdater_client update ${QUIET_OPT}"
+
+fi
+
+if [ -n "${STEAM}" ]; then
+
+    if command -v steamcmd >/dev/null 2>&1; then
+
+        if [ -z "${QUIET}" ]; then
+            echo
+            echo "##############################################################################"
+            echo "# Steam${NAME}"
+            echo "#"
+            echo
+        fi
+
+        # https://stackoverflow.com/questions/56573277/fabric-framework-can-t-be-opened-because-it-is-from-an-unidentified-developer
+        sudo spctl --master-disable
+
+        create_temporary_file
+        steamcmd_script=${TEMPFILE}
+
+        # get app IDs
+        app_ids=$(grep appid ~/Library/Application\ Support/Steam/steamapps/appmanifest*acf |
+            sed 's/.*"appid".*"\([0-9]*\)".*/\1/')
+
+        for app_id in ${app_ids}; do
+
+            if [ -z "${QUIET}" ]; then
+                echo "Updating Steam app '${app_id}'"
+            fi
+
+            cat <<____STEAM >"${steamcmd_script}"
+login anonymous
+app_update ${app_id}
+quit
+quit
+
+____STEAM
+
+            if [ -z "${QUIET}" ]; then
+                run_command "steamcmd runscript < ${steamcmd_script}"
+            else
+                run_command "steamcmd runscript < ${steamcmd_script} > /dev/null"
+            fi
+
+        done
+
+        sudo spctl --master-disable
+
+    else
+
+        if [ -z "${QUIET}" ]; then
+            echo 'steamcmd non installed: skipping Steam updates'
+        fi
+
+    fi
 
 fi
 
@@ -413,9 +540,9 @@ if [ -n "${BREW}" ]; then
 
 fi
 
-if [ -n "${EMACS}" ] ; then
+if [ -n "${EMACS}" ]; then
 
-    if [ -x /Applications/Emacs.app/Contents/MacOS/emacs-nw ] ; then
+    if [ -x /Applications/Emacs.app/Contents/MacOS/emacs-nw ]; then
 
         if [ -z "${QUIET}" ]; then
             echo
@@ -431,8 +558,7 @@ if [ -n "${EMACS}" ] ; then
 
 fi
 
-
-if [ -n "${RUBY}" ] ; then
+if [ -n "${RUBY}" ]; then
 
     if command -v bundle >/dev/null 2>&1; then
 
@@ -510,3 +636,5 @@ fi
 if [ -z "${QUIET}" ]; then
     echo
 fi
+
+remove_temporary_files

@@ -1,3 +1,5 @@
+* 2024-01-30, Version 2.4.0
+   * Steam support
 * 2023-10-01, Version 2.3.0
    * Options can be specified in the ```~/.update.sh.rc``` file (no documentation yet)
 * 2023-09-04, Version 2.2.0

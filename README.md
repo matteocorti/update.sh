@@ -1,5 +1,5 @@
 
- &copy; Matteo Corti, 2018-2023
+ &copy; Matteo Corti, 2018-2024
 
 ![](https://img.shields.io/github/v/release/matteocorti/update.sh)&nbsp;![](https://img.shields.io/github/downloads/matteocorti/update.sh/latest/total)&nbsp;![](https://img.shields.io/github/downloads/matteocorti/update.sh/total)&nbsp;![](https://img.shields.io/github/license/matteocorti/update.sh)&nbsp;![](https://img.shields.io/github/stars/matteocorti/update.sh)&nbsp;![](https://img.shields.io/github/forks/matteocorti/update.sh)
 
@@ -18,6 +18,7 @@ Updates a macOS system. Following software packages are analyzed and automatical
  - Ruby dependencies
  - Homebrew and installed packages
  - MacPorts and installed ports
+ - Steam games
 
 ## Usage
 
@@ -44,9 +45,11 @@ Options:
       --no-msupdate      do not update Microsoft products
       --no-perl          do not update Perl and CPAN modules with Perlbrew
       --no-ruby          do not update ruby
+      --no-steam         do not update steam
       --perl             update Perl and CPAN modules with Perlbrew
    -q,--quiet            minimal output
       --ruby             update ruby
+      --steam            update Steam
    -v,--verbose          verbose output
 
 Report bugs to https://github.com/matteocorti/update.sh/issues

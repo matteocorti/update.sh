@@ -1,3 +1,7 @@
+2024-01-30  Matteo Corti  <matteo@corti.li>
+
+        * update.sh: added Steam support
+
 2023-09-04  Matteo Corti  <matteo@corti.li>
 
         * update.sh: added --no-* options to skip updates
