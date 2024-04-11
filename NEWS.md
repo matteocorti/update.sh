@@ -1,3 +1,5 @@
+* 2024-04-11, Version 2.4.1
+   * Fixed Ruby
 * 2024-01-30, Version 2.4.0
    * Steam support
 * 2023-10-01, Version 2.3.0
@@ -29,3 +31,4 @@
    * Support for Adobe products
  * 2021-03-11 Version 1.0.0
    * Initial release
+y y   n

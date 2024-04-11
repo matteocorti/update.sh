@@ -1,1 +1,1 @@
-Steam support
+Bug fix for Ruby

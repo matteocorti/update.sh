@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2024 Matteo Corti <matteo@corti.li>
 
-VERSION=2.4.0
+VERSION=2.4.1
 
 SIGNALS="HUP INT QUIT TERM ABRT"
 
@@ -574,7 +574,6 @@ if [ -n "${RUBY}" ]; then
             VERBOSE_OPT='--verbose'
         fi
 
-        run_command "bundle update --no-color ${VERBOSE_OPT}"
         run_command "gem update --system ${VERBOSE_OPT}"
         run_command "gem update ${VERBOSE_OPT}"
 
