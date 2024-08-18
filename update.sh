@@ -2,7 +2,7 @@
 
 # Copyright (c) 2018-2024 Matteo Corti <matteo@corti.li>
 
-VERSION=2.4.1
+VERSION=2.5.0
 
 SIGNALS="HUP INT QUIT TERM ABRT"
 
@@ -142,16 +142,19 @@ while true; do
     case "$1" in
     --adobe)
         ADOBE=1
+        NO_ADOBE=
         ALL=
         shift
         ;;
     --apple)
         APPLE=1
+        NO_APPLE=
         ALL=
         shift
         ;;
     --brew)
         BREW=1
+        NO_BREW=
         ALL=
         shift
         ;;
@@ -161,6 +164,7 @@ while true; do
         ;;
     --emacs)
         EMACS=1
+        NO_EMACS=
         ALL=
         shift
         ;;
@@ -170,16 +174,19 @@ while true; do
         ;;
     --mas)
         MAS=1
+        NO_MAS=
         ALL=
         shift
         ;;
     --macupdater)
         MAC_UPDATER=1
+        NO_MAC_UPDATER=
         ALL=
         shift
         ;;
     --msupdate)
         MSUPDATE=1
+        NO_MSUPDATE=
         ALL=
         shift
         ;;

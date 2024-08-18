@@ -1,3 +1,5 @@
+* 2024-08-18, Version 2.5.0
+   * If an option is specified (e.g. ```--apple```), it overrides an eventual option in the configuration file (e.g. ```NO_APPLE=1```)
 * 2024-04-11, Version 2.4.1
    * Fixed Ruby
 * 2024-01-30, Version 2.4.0
@@ -31,4 +33,3 @@
    * Support for Adobe products
  * 2021-03-11 Version 1.0.0
    * Initial release
-y y   n
