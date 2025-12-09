@@ -15,11 +15,10 @@ error() {
     exit 1
 }
 
-
 request_admin_rights() {
-    if [ -x /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI ] ; then
-        if ! /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --status 2>&1 | grep -q 'administrator' ; then
-            if [ -n "${VERBOSE}" ] ; then
+    if [ -x /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI ]; then
+        if ! /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --status 2>&1 | grep -q 'administrator'; then
+            if [ -n "${VERBOSE}" ]; then
                 echo "Requesting privileges"
             fi
             /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --add --reason 'Updates'
@@ -28,16 +27,15 @@ request_admin_rights() {
 }
 
 revoke_admin_rights() {
-    if [ -x /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI ] ; then
-        if /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --status 2>&1 | grep -q 'administrator' ; then
-            if [ -n "${VERBOSE}" ] ; then
+    if [ -x /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI ]; then
+        if /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --status 2>&1 | grep -q 'administrator'; then
+            if [ -n "${VERBOSE}" ]; then
                 echo "Removing privileges"
             fi
             /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --remove
         fi
     fi
 }
-
 
 create_temporary_file() {
 
@@ -352,7 +350,6 @@ if [ -n "${CLEAR}" ]; then
     clear
 fi
 
-
 if [ -n "${MAC_UPDATER}" ] && [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
 
     if [ -z "${QUIET}" ]; then
@@ -370,7 +367,7 @@ if [ -n "${MAC_UPDATER}" ] && [ -x /Applications/MacUpdater.app/Contents/Resourc
     run_command "/Applications/MacUpdater.app/Contents/Resources/macupdater_client scan ${QUIET_OPT}"
 
     request_admin_rights
-    
+
     run_command "/Applications/MacUpdater.app/Contents/Resources/macupdater_client update ${QUIET_OPT}"
 
 fi
@@ -442,25 +439,24 @@ if [ -n "${MSUPDATE}" ]; then
             echo "#"
             echo
         fi
-        
+
         if [ -n "${VERBOSE}" ]; then
             # we don't need the list
             run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
         fi
         run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
-        
+
         if [ -z "${QUIET}" ]; then
             echo
         fi
 
     else
 
-        if [ -n "${VERBOSE}" ] ; then
+        if [ -n "${VERBOSE}" ]; then
             echo "M365 is not installed"
         fi
 
     fi
-        
 
 fi
 
@@ -480,7 +476,7 @@ if [ -n "${ADOBE}" ]; then
 
     else
 
-        if [ -n "${VERBOSE}" ] ; then
+        if [ -n "${VERBOSE}" ]; then
             echo "Adobe update manager is not installed"
         fi
 
@@ -534,7 +530,7 @@ if [ -n "${MAS}" ]; then
 
     else
 
-        if [ -n "${VERBOSE}" ] ; then
+        if [ -n "${VERBOSE}" ]; then
             echo "mas is not installed"
         fi
 
@@ -547,7 +543,7 @@ if [ -n "${PORT}" ]; then
     if command -v port >/dev/null 2>&1; then
 
         request_admin_rights
-        
+
         if [ -z "${QUIET}" ]; then
             echo
             echo "##############################################################################"
@@ -572,7 +568,7 @@ if [ -n "${PORT}" ]; then
 
     else
 
-        if [ -n "${VERBOSE}" ] ; then
+        if [ -n "${VERBOSE}" ]; then
             echo "MacPorts is not installed"
         fi
 
@@ -607,10 +603,10 @@ if [ -n "${BREW}" ]; then
 
     else
 
-        if [ -n "${VERBOSE}" ] ; then
+        if [ -n "${VERBOSE}" ]; then
             echo "Homwbrew is not installed"
         fi
-        
+
     fi
 
 fi
@@ -631,10 +627,10 @@ if [ -n "${EMACS}" ]; then
 
     else
 
-        if [ -n "${VERBOSE}" ] ; then
+        if [ -n "${VERBOSE}" ]; then
             echo "Emacs is not installed"
         fi
-        
+
     fi
 
 fi
@@ -660,10 +656,10 @@ if [ -n "${RUBY}" ]; then
 
     else
 
-        if [ -n "${VERBOSE}" ] ; then
+        if [ -n "${VERBOSE}" ]; then
             echo "Ruby is not installed"
         fi
-        
+
     fi
 
 fi
@@ -717,10 +713,10 @@ if [ -n "${PERL}" ]; then
 
     else
 
-        if [ -n "${VERBOSE}" ] ; then
+        if [ -n "${VERBOSE}" ]; then
             echo "Perlbrew is not installed"
         fi
-        
+
     fi
 
 fi
