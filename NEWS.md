@@ -1,3 +1,6 @@
+
+* 2025-12-09, Version 2.6.0
+   * Requesting administrator privileges if needed
 * 2024-08-18, Version 2.5.0
    * If an option is specified (e.g. ```--apple```), it overrides an eventual option in the configuration file (e.g. ```NO_APPLE=1```)
 * 2024-04-11, Version 2.4.1
