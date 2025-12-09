@@ -15,6 +15,22 @@ error() {
     exit 1
 }
 
+
+request_admin_rights() {
+    if [ -x /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI ] ; then
+        if ! /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --status 2>&1 | grep -q 'administrator' ; then
+            /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --add --reason 'Updates'
+        fi
+    fi
+}
+
+revoke_admin_rights() {
+    if [ -x /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI ] ; then
+        /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --remove
+    fi
+}
+
+
 create_temporary_file() {
 
     # create a temporary file
@@ -327,6 +343,7 @@ fi
 if [ -n "${CLEAR}" ]; then
     clear
 fi
+
 
 if [ -n "${MAC_UPDATER}" ] && [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
 
@@ -644,3 +661,4 @@ if [ -z "${QUIET}" ]; then
 fi
 
 remove_temporary_files
+remove_admin_rights
