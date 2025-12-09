@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Copyright (c) 2018-2024 Matteo Corti <matteo@corti.li>
+# Copyright (c) 2018-2025 Matteo Corti <matteo@corti.li>
 
-VERSION=2.5.0
+VERSION=2.6.0
 
 SIGNALS="HUP INT QUIT TERM ABRT"
 
@@ -14,6 +14,30 @@ error() {
     printf 'Error: %s\n' "${1}" 1>&2
     exit 1
 }
+
+
+request_admin_rights() {
+    if [ -x /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI ] ; then
+        if ! /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --status 2>&1 | grep -q 'administrator' ; then
+            if [ -n "${VERBOSE}" ] ; then
+                echo "Requesting privileges"
+            fi
+            /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --add --reason 'Updates'
+        fi
+    fi
+}
+
+revoke_admin_rights() {
+    if [ -x /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI ] ; then
+        if /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --status 2>&1 | grep -q 'administrator' ; then
+            if [ -n "${VERBOSE}" ] ; then
+                echo "Removing privileges"
+            fi
+            /Applications/Privileges.app/Contents/MacOS/PrivilegesCLI --remove
+        fi
+    fi
+}
+
 
 create_temporary_file() {
 
@@ -328,6 +352,7 @@ if [ -n "${CLEAR}" ]; then
     clear
 fi
 
+
 if [ -n "${MAC_UPDATER}" ] && [ -x /Applications/MacUpdater.app/Contents/Resources/macupdater_client ]; then
 
     if [ -z "${QUIET}" ]; then
@@ -343,6 +368,9 @@ if [ -n "${MAC_UPDATER}" ] && [ -x /Applications/MacUpdater.app/Contents/Resourc
     fi
 
     run_command "/Applications/MacUpdater.app/Contents/Resources/macupdater_client scan ${QUIET_OPT}"
+
+    request_admin_rights
+    
     run_command "/Applications/MacUpdater.app/Contents/Resources/macupdater_client update ${QUIET_OPT}"
 
 fi
@@ -395,48 +423,68 @@ ____STEAM
 
     else
 
-        if [ -z "${QUIET}" ]; then
-            echo 'steamcmd non installed: skipping Steam updates'
+        if [ -n "${VERBOSE}" ]; then
+            echo 'Steam non installed: skipping Steam updates'
         fi
 
     fi
 
 fi
 
-if [ -n "${MSUPDATE}" ] && [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate ]; then
+if [ -n "${MSUPDATE}" ]; then
 
-    if [ -z "${QUIET}" ]; then
-        echo
-        echo "################################################################################"
-        echo "# Microsoft${NAME}"
-        echo "#"
-        echo
-    fi
+    if [ -x /Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate ]; then
 
-    if [ -n "${VERBOSE}" ]; then
-        # we don't need the list
-        run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
-    fi
-    run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
+        if [ -z "${QUIET}" ]; then
+            echo
+            echo "################################################################################"
+            echo "# Microsoft${NAME}"
+            echo "#"
+            echo
+        fi
+        
+        if [ -n "${VERBOSE}" ]; then
+            # we don't need the list
+            run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --list'
+        fi
+        run_command '/Library/Application\ Support/Microsoft/MAU2.0/Microsoft\ AutoUpdate.app/Contents/MacOS/msupdate --install'
+        
+        if [ -z "${QUIET}" ]; then
+            echo
+        fi
 
-    if [ -z "${QUIET}" ]; then
-        echo
+    else
+
+        if [ -n "${VERBOSE}" ] ; then
+            echo "M365 is not installed"
+        fi
+
     fi
+        
 
 fi
 
-if [ -n "${ADOBE}" ] && [ -x /usr/local/bin/RemoteUpdateManager ]; then
+if [ -n "${ADOBE}" ]; then
 
-    if [ -z "${QUIET}" ]; then
-        echo
-        echo "################################################################################"
-        echo "# Adobe${NAME}"
-        echo "#"
-        echo
+    if [ -x /usr/local/bin/RemoteUpdateManager ]; then
+
+        if [ -z "${QUIET}" ]; then
+            echo
+            echo "################################################################################"
+            echo "# Adobe${NAME}"
+            echo "#"
+            echo
+        fi
+
+        run_command 'sudo /usr/local/bin/RemoteUpdateManager  --action=install'
+
+    else
+
+        if [ -n "${VERBOSE}" ] ; then
+            echo "Adobe update manager is not installed"
+        fi
+
     fi
-
-    run_command 'sudo /usr/local/bin/RemoteUpdateManager  --action=install'
-
 fi
 
 if [ -n "${APPLE}" ]; then
@@ -484,6 +532,12 @@ if [ -n "${MAS}" ]; then
             run_command 'mas upgrade 2>&1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g"'
         fi
 
+    else
+
+        if [ -n "${VERBOSE}" ] ; then
+            echo "mas is not installed"
+        fi
+
     fi
 
 fi
@@ -492,6 +546,8 @@ if [ -n "${PORT}" ]; then
 
     if command -v port >/dev/null 2>&1; then
 
+        request_admin_rights
+        
         if [ -z "${QUIET}" ]; then
             echo
             echo "##############################################################################"
@@ -512,6 +568,12 @@ if [ -n "${PORT}" ]; then
             run_command "sudo port ${VERBOSE_OPT} -N -c -p upgrade outdated"
             run_command "sudo port ${VERBOSE_OPT} -N -u -q -p uninstall"
 
+        fi
+
+    else
+
+        if [ -n "${VERBOSE}" ] ; then
+            echo "MacPorts is not installed"
         fi
 
     fi
@@ -543,6 +605,12 @@ if [ -n "${BREW}" ]; then
         run_command "brew ${VERBOSE_OPT} autoremove"
         run_command "brew ${VERBOSE_OPT} cleanup"
 
+    else
+
+        if [ -n "${VERBOSE}" ] ; then
+            echo "Homwbrew is not installed"
+        fi
+        
     fi
 
 fi
@@ -561,6 +629,12 @@ if [ -n "${EMACS}" ]; then
 
         run_command "/Applications/Emacs.app/Contents/MacOS/emacs-nw -l ~/.emacs --batch -f auto-package-update-now"
 
+    else
+
+        if [ -n "${VERBOSE}" ] ; then
+            echo "Emacs is not installed"
+        fi
+        
     fi
 
 fi
@@ -584,6 +658,12 @@ if [ -n "${RUBY}" ]; then
         run_command "gem update --system ${VERBOSE_OPT}"
         run_command "gem update ${VERBOSE_OPT}"
 
+    else
+
+        if [ -n "${VERBOSE}" ] ; then
+            echo "Ruby is not installed"
+        fi
+        
     fi
 
 fi
@@ -635,6 +715,12 @@ if [ -n "${PERL}" ]; then
 
         done
 
+    else
+
+        if [ -n "${VERBOSE}" ] ; then
+            echo "Perlbrew is not installed"
+        fi
+        
     fi
 
 fi
@@ -644,3 +730,4 @@ if [ -z "${QUIET}" ]; then
 fi
 
 remove_temporary_files
+revoke_admin_rights
