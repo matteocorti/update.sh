@@ -1,3 +1,7 @@
+2026-06-11  Matteo Corti  <matteo@corti.li>
+
+        * update.sh (ALL): brew upgrade --yes (needed with brew 6.0.0)
+
 2025-12-09  Matteo Corti  <matteo@corti.li>
 
         * update.sh (request_admin_rights): Requesting admin rights if necessary

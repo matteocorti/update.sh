@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Copyright (c) 2018-2025 Matteo Corti <matteo@corti.li>
+# Copyright (c) 2018-2026 Matteo Corti <matteo@corti.li>
 
-VERSION=2.6.0
+VERSION=2.7.0
 
 SIGNALS="HUP INT QUIT TERM ABRT"
 
@@ -593,10 +593,10 @@ if [ -n "${BREW}" ]; then
         fi
 
         run_command "brew ${VERBOSE_OPT} update"
-        run_command "brew ${VERBOSE_OPT} upgrade"
+        run_command "brew ${VERBOSE_OPT} upgrade --yes"
 
         # Cask
-        run_command "brew ${VERBOSE_OPT} upgrade --cask"
+        run_command "brew ${VERBOSE_OPT} upgrade --cask --yes"
 
         run_command "brew ${VERBOSE_OPT} autoremove"
         run_command "brew ${VERBOSE_OPT} cleanup"
