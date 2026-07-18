@@ -55,6 +55,49 @@ Options:
 Report bugs to https://github.com/matteocorti/update.sh/issues
 ```
 
+## Configuration
+
+The following environment variables can be used to control each update:
+
+If set forces the update:
+
+```
+ADOBE
+APPLE
+BREW
+EMACS
+MAC_UPDATER
+MAS
+MSUPDATE
+PERL
+RUBY
+STEAM
+```
+
+If set skips the update:
+
+```
+NO_ADOBE
+NO_APPLE
+NO_BREW
+NO_EMACS
+NO_MAC_UPDATER
+NO_MAS
+NO_MSUPDATE
+NO_PERL
+NO_RUBY
+NO_STEAM
+```
+
+Each configuration can also be stored in a configuration file ```${HOME}/.updates.sh.rc```
+
+For example:
+
+```
+NO_MSUPDATE=1
+NO_RUBY=1
+```
+
 ## Bugs
 
 Report bugs to [https://github.com/matteocorti/update.sh/issues](https://github.com/matteocorti/update.sh/issues)
